@@ -6,10 +6,6 @@
 package Client;
 
 import Entity.Produit;
-import Entity.Recette;
-import Services.PanierService;
-import Services.ProduitService;
-import Services.RecetteServices;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
 import com.codename1.ui.Button;
@@ -23,7 +19,6 @@ import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.FontImage;
-import com.codename1.ui.Form;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
@@ -37,34 +32,29 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
-import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
-import com.codename1.ui.util.UIBuilder;
 import com.codename1.uikit.cleanmodern.BaseForm;
-import java.util.List;
 
 /**
  *
  * @author escobar
  */
-public class ClientProduit extends BaseForm {
+public class ProduitSingle extends BaseForm {
 
     Resources res;
 
     EncodedImage enc;
-    Container cnt, cntForm;
-
-    public ClientProduit(Resources res) {
-        super("Produit", BoxLayout.y());
-        this.res=res;
+    Container cnt,cntForm ;
+    
+    public ProduitSingle (Resources res, Produit p) {
+        super("ProduitSingle", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
-        setTitle("Produit");
+        setTitle("ProduitSingle");
         getContentPane().setScrollVisible(false);
         Container button = new Container();
-        cntForm = new Container(BoxLayout.y());
-
+        System.out.println("Client.ProduitSingle.<init>()"+p);
         super.addSideMenu(res);
         tb.addSearchCommand(e -> {
         });
@@ -73,7 +63,6 @@ public class ClientProduit extends BaseForm {
         Label spacer1 = new Label();
         Label spacer2 = new Label();
         addTab(swipe, res.getImage("news-item.jpg"), spacer1, "  ", "", " ");
-        addTab(swipe, res.getImage("dog.jpg"), spacer2, "  ", "", "");
 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -112,53 +101,35 @@ public class ClientProduit extends BaseForm {
         });
 
         Component.setSameSize(radioContainer, spacer1, spacer2);
-        add(LayeredLayout.encloseIn(swipe, radioContainer, button));
+        add(LayeredLayout.encloseIn(swipe, radioContainer,button));
 
         ButtonGroup barGroup = new ButtonGroup();
-
-        RadioButton Sucre = RadioButton.createToggle("Sucrée", barGroup);
-        Sucre.setUIID("SelectBar");
-        Sucre.addActionListener(e -> {
-            cntForm.removeAll();
-            cntForm = new Container(BoxLayout.y());
-            add(cntForm);
-            ProduitService ps = new ProduitService();
-            List<Produit> p = ps.findUser();
-            for(Produit pr : p){
-                            addButton(res.getImage("news-item.jpg"), pr.getNomProd(),pr.getQteStockProd(),pr);
-
-            }
-          
+        RadioButton all = RadioButton.createToggle("Produit", barGroup);
+        all.setUIID("SelectBar");
+        cntForm=new Container(BoxLayout.y());
+        all.addActionListener(e -> {
+                cntForm.removeAll();
+                cntForm=new Container(BoxLayout.y());
+                add(cntForm);
+                addButton(res.getImage("news-item.jpg"), p.getNomProd(),p.getQteStockProd());
+            
 
         });
-        RadioButton Salee = RadioButton.createToggle("Salée", barGroup);
-        Salee.setUIID("SelectBar");
-        Salee.addActionListener(e -> {
-            cntForm.removeAll();
-            cntForm = new Container(BoxLayout.y());
-            add(cntForm);
-            //addButton(res.getImage("news-item.jpg"), "Liste des Formation");
-            //addButton(res.getImage("news-item.jpg"), "Formation En cours");
-            //addButton(res.getImage("news-item.jpg"), "Formation Finies");
-
-        });
-
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
 
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(2, Sucre, Salee),
+                GridLayout.encloseIn(4, all),
                 FlowLayout.encloseBottom(arrow)
         ));
 
-        Sucre.setSelected(true);
+        all.setSelected(true);
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(Sucre, arrow);
+            updateArrowPosition(all, arrow);
         });
-        bindButtonSelection(Sucre, arrow);
-        bindButtonSelection(Salee, arrow);
-
+        bindButtonSelection(all, arrow);
+     
         // special case for rotation
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
@@ -210,28 +181,27 @@ public class ClientProduit extends BaseForm {
         swipe.addTab("", page1);
     }
 
-    private void addButton(Image img, String title,double d,Produit p) {
-
+    private void addButton(Image img, String title,Double d) {
+        
         int height = Display.getInstance().convertToPixels(11.5f);
         int width = Display.getInstance().convertToPixels(14f);
         Button image = new Button(img.fill(width, height));
         image.setUIID("Label");
         cnt = BorderLayout.west(image);
+              
+
         cnt.setLeadComponent(image);
         TextArea ta = new TextArea(title);
         ta.setUIID("NewsTopLine");
         ta.setEditable(false);
-        TextArea tb = new TextArea(String.valueOf(d));
         cnt.add(BorderLayout.CENTER,
                 BoxLayout.encloseY(
-                        ta,tb
-                ));
+                        ta
+                       
+                        ) );
         cntForm.add(cnt);
-        image.addActionListener(e->{
-                
-                new  ProduitSingle(res, p).show();
-                
-        });
+      
+        
     }
 
     private void bindButtonSelection(Button b, Label arrow) {
@@ -244,3 +214,4 @@ public class ClientProduit extends BaseForm {
         });
     }
 }
+

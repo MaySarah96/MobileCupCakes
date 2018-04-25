@@ -134,7 +134,7 @@ public class ClientRecette extends BaseForm {
                 FlowLayout.encloseBottom(arrow)
         ));
 
-        all.setSelected(true);
+        all.setSelected(false);
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
