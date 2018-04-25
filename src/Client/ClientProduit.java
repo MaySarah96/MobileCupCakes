@@ -126,7 +126,6 @@ public class ClientProduit extends BaseForm {
             List<Produit> p = ps.findUser();
             for(Produit pr : p){
                             addButton(res.getImage("news-item.jpg"), pr.getNomProd(),pr.getQteStockProd(),pr);
-
             }
           
 
@@ -163,7 +162,14 @@ public class ClientProduit extends BaseForm {
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
-
+        cntForm.removeAll();
+        cntForm = new Container(BoxLayout.y());
+        add(cntForm);
+        ProduitService ps = new ProduitService();
+        List<Produit> p = ps.findUser();
+        for(Produit pr : p){
+                        addButton(res.getImage("news-item.jpg"), pr.getNomProd(),pr.getQteStockProd(),pr);
+        }
     }
 
     private void updateArrowPosition(Button b, Label arrow) {
