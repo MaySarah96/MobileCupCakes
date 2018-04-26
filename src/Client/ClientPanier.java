@@ -39,7 +39,7 @@ public class ClientPanier {
         c1 =uiBuilder.createContainer(theme, "ListTest");
         
         RecetteServices recetteService = new RecetteServices();
-        List<Recette> listR = recetteService.findUser();
+        List<Recette> listR = recetteService.findRecette(0);
         for(Recette r : listR)
         {
             Label lab = new Label(r.getNomRec());

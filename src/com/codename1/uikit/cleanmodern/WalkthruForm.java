@@ -1,6 +1,7 @@
 
 package com.codename1.uikit.cleanmodern;
 
+import Entity.SessionUser;
 import Entity.Utilisateur;
 import Services.UtilisateurServices;
 import com.codename1.components.FloatingHint;
@@ -76,6 +77,15 @@ public class WalkthruForm extends BaseForm {
                     String hashed =user.getPassword().substring(0, 2)+"a"+user.getPassword().substring(3);
                     if (BCrypt.checkpw(password.getText(),hashed)) 
                     {
+                        SessionUser.setAddresse(user.getAddresse());
+                        SessionUser.setEmail(user.getEmail());
+                        SessionUser.setId(user.getId());
+                        SessionUser.setNom(user.getNom());
+                        SessionUser.setPrenom(user.getPrenom());
+                        SessionUser.setPassword(user.getPassword());
+                        SessionUser.setPhoneNumber(user.getPhoneNumber());
+                        SessionUser.setRoles(user.getRoles());
+                        SessionUser.setImageProfil(user.getImageProfil());
                         if (user.getRoles().equals("a:1:{i:0;s:11:\"ROLE_CLIENT\";}"))
                         {
                             new NewsfeedForm(res).show();

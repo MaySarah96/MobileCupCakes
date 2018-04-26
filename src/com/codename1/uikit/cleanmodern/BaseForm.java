@@ -13,6 +13,7 @@ import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import java.io.IOException;
 
 /**
  * Base class for the forms with common functionality
@@ -69,7 +70,12 @@ public class BaseForm extends Form {
         tb.addMaterialCommandToSideMenu("Commande", FontImage.MATERIAL_SHOPPING_CART, e -> new Client.ClientCommande(res).show());
         tb.addMaterialCommandToSideMenu("Formation", FontImage.MATERIAL_BUSINESS_CENTER, e -> new Client.ClientFormation(res).show());
         tb.addMaterialCommandToSideMenu("Promotion", FontImage.MATERIAL_MONEY_OFF, e -> new Client.ClientPromotion(res).show());
-        tb.addMaterialCommandToSideMenu("Recette", FontImage.MATERIAL_RESTAURANT_MENU, e -> new Client.ClientRecette(res).show());        
+        tb.addMaterialCommandToSideMenu("Recette", FontImage.MATERIAL_RESTAURANT_MENU, e -> {
+            try {
+                new Client.ClientRecette(res).show();
+            } catch (IOException ex) {
+            }
+        });        
         tb.addMaterialCommandToSideMenu("Logout", FontImage.MATERIAL_EXIT_TO_APP, e -> new WalkthruForm(res).show());
 
     }

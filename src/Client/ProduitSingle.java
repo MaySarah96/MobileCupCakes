@@ -48,6 +48,7 @@ public class ProduitSingle extends BaseForm {
     
     public ProduitSingle (Resources res, Produit p) {
         super("ProduitSingle", BoxLayout.y());
+        this.res=res;
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");

@@ -16,7 +16,7 @@ require_once __DIR__ . '/db_connect.php';
 $db = new DB_CONNECT();
 
     // get a login from memberFamily table
-    $result = mysql_query("SELECT * FROM recette");
+    $result = mysql_query("SELECT * FROM recette r ,categorie_rec cr where r.idCatRec=cr.idCatRec");
 
     if (mysql_num_rows($result) > 0) {
     // looping through all results
@@ -27,8 +27,10 @@ $db = new DB_CONNECT();
         // temp user array
         $recette = array();
         $recette["nomRec"] = $row["nomRec"];
-	//$recette["imageRec"]= $row["imageRec"];
-	//echo $row["imageRec"];
+		$recette["nomCatRec"] = $row["nomCatRec"];
+		$recette["idCatRec"] = $row["idCatRec"];
+		$recette["imageRec"] = $row["imageRec"];
+		$recette["idRec"] = $row["idRec"];
         // push single login into final response array
         array_push($response["info"], $recette);
     }

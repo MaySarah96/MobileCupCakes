@@ -5,6 +5,9 @@
  */
 package Client;
 
+import Entity.Recette;
+import Entity.SessionUser;
+import Services.RecetteServices;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
 import com.codename1.ui.Button;
@@ -19,7 +22,6 @@ import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Graphics;
-import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.RadioButton;
 import com.codename1.ui.Tabs;
@@ -33,6 +35,11 @@ import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
 import com.codename1.uikit.cleanmodern.BaseForm;
+import java.util.List;
+import com.codename1.ui.Image;
+import com.codename1.ui.URLImage;
+import java.io.IOException;
+
 
 /**
  *
@@ -45,8 +52,10 @@ public class ClientRecette extends BaseForm {
     EncodedImage enc;
     Container cnt,cntForm ;
     
-    public ClientRecette (Resources res) {
+    public ClientRecette (Resources res) throws IOException {
         super("Recette", BoxLayout.y());
+        this.res=res;
+        
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
@@ -61,8 +70,7 @@ public class ClientRecette extends BaseForm {
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("news-item.jpg"), spacer1, "  ", "", " ");
-        addTab(swipe, res.getImage("dog.jpg"), spacer2, "  ", "", "");
+        addTab(swipe, res.getImage("allR.jpg"), spacer1, "  ", "", " ");
 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -86,6 +94,7 @@ public class ClientRecette extends BaseForm {
         flow.setValign(BOTTOM);
         Container radioContainer = new Container(flow);
         cnt = new Container();
+        enc = EncodedImage.create("/giphy.gif");
         for (int iter = 0; iter < rbs.length; iter++) {
             rbs[iter] = RadioButton.createToggle(unselectedWalkthru, bg);
             rbs[iter].setPressedIcon(selectedWalkthru);
@@ -104,49 +113,65 @@ public class ClientRecette extends BaseForm {
         add(LayeredLayout.encloseIn(swipe, radioContainer,button));
 
         ButtonGroup barGroup = new ButtonGroup();
-        RadioButton all = RadioButton.createToggle("Mes Recettes", barGroup);
-        all.setUIID("SelectBar");
+        RadioButton mesRecettes = RadioButton.createToggle("Mes Recettes", barGroup);
+        mesRecettes.setUIID("SelectBar");
         cntForm=new Container(BoxLayout.y());
-        all.addActionListener(e -> {
+        mesRecettes.addActionListener(e -> {
                 cntForm.removeAll();
                 cntForm=new Container(BoxLayout.y());
                 add(cntForm);
-                addButton(res.getImage("news-item.jpg"), "testtttt");
-            
+                RecetteServices recetteService = new RecetteServices();
+                System.out.println("Client.ClientRecette.<init>()"+SessionUser.getId());
+                List<Recette> listRecettes = recetteService.findRecette(SessionUser.getId());
+                for (Recette recette : listRecettes){
+                        Image image = URLImage.createToStorage(enc, recette.getImageRec(), "http://localhost/final/web/public/uploads/brochures/Recettes/"+recette.getImageRec());
+                        addButton(image, recette.getNomRec(),recette);
+                }
 
         });
-        RadioButton Formation = RadioButton.createToggle("Liste", barGroup);
+        RadioButton Formation = RadioButton.createToggle("Liste des recettes", barGroup);
         Formation.setUIID("SelectBar");
         Formation.addActionListener(e -> {
                 cntForm.removeAll();
                 cntForm=new Container(BoxLayout.y());
                 add(cntForm);
-                addButton(res.getImage("news-item.jpg"), "Liste des Formation");
-                addButton(res.getImage("news-item.jpg"), "Formation En cours");
-                addButton(res.getImage("news-item.jpg"), "Formation Finies");
+                RecetteServices recetteService = new RecetteServices();
+                List<Recette> listRecettes = recetteService.findRecette(0);
+                for (Recette recette : listRecettes){
+                        Image image = URLImage.createToStorage(enc, recette.getImageRec(), "http://localhost/final/web/public/uploads/brochures/Recettes/"+recette.getImageRec());
+                        addButton(image, recette.getNomRec(),recette);
+                }
 
 
         });
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
 
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(2, all, Formation),
+                GridLayout.encloseIn(2, mesRecettes, Formation),
                 FlowLayout.encloseBottom(arrow)
         ));
 
-        all.setSelected(false);
+        mesRecettes.setSelected(false);
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
-            updateArrowPosition(all, arrow);
+            updateArrowPosition(mesRecettes, arrow);
         });
-        bindButtonSelection(all, arrow);
+        bindButtonSelection(mesRecettes, arrow);
         bindButtonSelection(Formation, arrow);
        
         // special case for rotation
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
+        
+        add(cntForm);
+        RecetteServices recetteService = new RecetteServices();
+        List<Recette> listRecettes = recetteService.findRecette(SessionUser.getId());
+        for (Recette recette : listRecettes){
+                Image image = URLImage.createToStorage(enc, recette.getImageRec(), "http://localhost/final/web/public/uploads/brochures/Recettes/"+recette.getImageRec());
+                addButton(image, recette.getNomRec(),recette);
+        }
 
     }
 
@@ -185,7 +210,7 @@ public class ClientRecette extends BaseForm {
                         BorderLayout.south(
                                 BoxLayout.encloseY(
                                         new SpanLabel(text, "LargeWhiteText"),
-                                        FlowLayout.encloseIn(likes, comments),
+                                        //FlowLayout.encloseIn(likes, comments),
                                         spacer
                                 )
                         )
@@ -194,7 +219,7 @@ public class ClientRecette extends BaseForm {
         swipe.addTab("", page1);
     }
 
-    private void addButton(Image img, String title) {
+    private void addButton(Image img, String title,Recette recette) {
         
         int height = Display.getInstance().convertToPixels(11.5f);
         int width = Display.getInstance().convertToPixels(14f);
@@ -214,8 +239,12 @@ public class ClientRecette extends BaseForm {
                         ) );
         cntForm.add(cnt);
         image.addActionListener(e -> {
-            //Client.ClientCommande clientTemplate = new ClientCommande();
-            //clientTemplate.startClientCommande();
+            try {
+                new  SingleRecette(res, recette).show();
+                //Client.ClientCommande clientTemplate = new ClientCommande();
+                //clientTemplate.startClientCommande();
+            } catch (IOException ex) {
+            }
         });
         
     }

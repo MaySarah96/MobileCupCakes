@@ -5,6 +5,7 @@
  */
 package Services;
 
+import Entity.CategorieRec;
 import Entity.Recette;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
@@ -25,12 +26,12 @@ public class RecetteServices {
     
     private ConnectionRequest con;
 
-    public List<Recette> findUser()
+    public List<Recette> findRecette(int idUser)
     {
         List<Recette> recettes = new ArrayList<>();
         
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/MobileCupCakes/ScriptPHP/Utilisateur/test.php"); 
+        con.setUrl("http://localhost/MobileCupCakes/ScriptPHP/Recettes/test.php?uid="+idUser+""); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -45,7 +46,10 @@ public class RecetteServices {
                             for (Map<String, Object> obj : list) { 
                                 Recette recette = new Recette();
                                 recette.setNomRec(obj.get("nomRec").toString());
-                                //recette.setImageRec(obj.get("imageRec").toString());
+                                recette.setIdRec(Integer.parseInt(obj.get("idRec").toString()));
+                                recette.setDescriptionRec(obj.get("descriptionRec").toString());
+                                recette.setIdCatRec(new CategorieRec(Integer.parseInt(obj.get("idCatRec").toString()), obj.get("nomCatRec").toString()));
+                                recette.setImageRec(obj.get("imageRec").toString());
                                 recettes.add(recette);
                                 
                             }
