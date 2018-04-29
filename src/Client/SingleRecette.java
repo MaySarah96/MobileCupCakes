@@ -5,11 +5,16 @@
  */
 package Client;
 
+import Entity.Commentaire;
+import Entity.Note;
 import Entity.Recette;
+import Entity.SessionUser;
+import Entity.Utilisateur;
+import Services.CommentaireServices;
+import Services.NoteServices;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
 import com.codename1.components.WebBrowser;
-import com.codename1.ui.BrowserComponent;
 import com.codename1.ui.Button;
 import com.codename1.ui.ButtonGroup;
 import com.codename1.ui.Component;
@@ -20,11 +25,13 @@ import static com.codename1.ui.Component.RIGHT;
 import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
+import com.codename1.ui.Font;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
 import com.codename1.ui.RadioButton;
+import com.codename1.ui.Slider;
 import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
 import com.codename1.ui.Toolbar;
@@ -35,10 +42,12 @@ import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
+import com.codename1.ui.plaf.Border;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
 import com.codename1.uikit.cleanmodern.BaseForm;
 import java.io.IOException;
+import java.util.List;
 
 /**
  *
@@ -46,13 +55,19 @@ import java.io.IOException;
  */
 public class SingleRecette extends BaseForm{
     Resources res;
-
+    Label moyenne ;
     EncodedImage enc;
-    Container cnt,cntForm ;
+    Container cnt,cntForm,cntComment ;
+    Recette recette ;
     
     public SingleRecette (Resources res, Recette recette) throws IOException {
         super("SingleRecette", BoxLayout.y());
+        this.recette = recette;
         this.res=res;
+        start();
+    }
+    
+    public void start() throws IOException{
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
@@ -116,17 +131,34 @@ public class SingleRecette extends BaseForm{
         RadioButton all = RadioButton.createToggle(recette.getIdCatRec().getNomCatRec(), barGroup);
         all.setUIID("SelectBar");
         cntForm=new Container(BoxLayout.y());
+        Container contMoy = new Container(BoxLayout.x());
+        
+        NoteServices noteService = new NoteServices();
+        CommentaireServices commentService = new CommentaireServices();
+        
+        Double note = noteService.MoyenneNote(recette.getIdRec());
+        moyenne = new Label("Note : "+note.toString()+"/5");
+        
         Label nomRec = new Label(recette.getNomRec());
-        cntForm.add(nomRec);
+        contMoy.add(nomRec).add(moyenne);
+
+        cntForm.add(contMoy);
         System.out.println(recette.getDescriptionRec());
         WebBrowser browser = new WebBrowser();
+        //browser.setPreferredSize(new Dimension(500, 200));
+        browser.setEnabled(false);
+        browser.setTactileTouch(false);
         browser.setPage(recette.getDescriptionRec(), "");
         //browser.add(recette.getDescriptionRec());
         //browser.setPage("", "");
-        
-        cntForm.add(browser);
-        
-        all.addActionListener(e -> {
+        Container cBrowser = new Container();
+        //browser.setPreferredH(recette.getDescriptionRec().length());
+        cBrowser.add(browser);
+        cntForm.add(createStarRankSlider());
+
+        cntForm.add(cBrowser);
+
+        /*all.addActionListener(e -> {
                 cntForm.removeAll();
                 cntForm=new Container(BoxLayout.y());
                 
@@ -134,7 +166,7 @@ public class SingleRecette extends BaseForm{
                 //addButton(res.getImage("news-item.jpg"), recette.getNomRec());
             
 
-        });
+        });*/
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
 
         add(LayeredLayout.encloseIn(
@@ -154,7 +186,61 @@ public class SingleRecette extends BaseForm{
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
+        TextArea CommentText = new TextArea(2, 3);
+        CommentText.setHint("Ajouter un commentaire");
+        cntForm.add(CommentText);
+        
+        // commentaire
+        Container cBtnComment = new Container(new FlowLayout(Component.RIGHT,Component.CENTER));
+        Button btnComment = new Button("Commenter");
+        btnComment.addActionListener(l->{
+            commentService.AjouterCommentaire(recette.getIdRec().toString(), CommentText.getText());
+            removeAll();
+            try {
+                start();
+            } catch (IOException ex) {
+            }
+        });
+        
+        cBtnComment.add(btnComment);
+        cntForm.add(cBtnComment);
+        List<Commentaire> comments = commentService.findComment(recette.getIdRec());
+        AfficherComment(comments,"",commentService);
+        
+        
         add(cntForm);
+    }
+    
+    
+    private void AfficherComment(List<Commentaire> listCom ,String ancestors,CommentaireServices commentService){
+        while(listCom.size() != 0)
+        {
+            Commentaire comment = listCom.get(0);
+            if (comment.getAncestors().equals("") || comment.getAncestors().equals(null))
+                ancestors = comment.getIdCmnt().toString();
+            else               
+                ancestors = comment.getAncestors() + "/" + comment.getIdCmnt().toString();
+            Container contCom = new Container(BoxLayout.y());
+            Label username = new Label(comment.getIdUser().getUsername());
+            username.setUIID("LabelComment");
+            Label created_at = new Label(comment.getCreatedAt());
+            created_at.setUIID("LabelDate");
+            Label body = new Label(comment.getBody());
+            body.setUIID("LabelBody");
+            Container contNameDate = new Container(BoxLayout.x());
+            contNameDate.add(username).add(created_at);
+            contCom.add(contNameDate).add(body);
+            listCom.remove(0);
+            contCom.setUIID("containerCommentaire");
+            contCom.getStyle().setMarginLeft(comment.getAncestors().length() *3);
+            
+            //contCom.getStyle().setBorder(Border.createLineBorder(1));
+            cntForm.add(contCom);
+            List<Commentaire> lisComment = commentService.findReplyComment(ancestors);
+            if(lisComment.size()!= 0){
+                System.out.println("Client.SingleRecette.AfficherComment() d5al c bon lel reply");
+                AfficherComment(lisComment, ancestors, commentService);}
+        }
     }
 
     private void updateArrowPosition(Button b, Label arrow) {
@@ -179,9 +265,9 @@ public class SingleRecette extends BaseForm{
 
         Label comments = new Label(commentsStr);
         FontImage.setMaterialIcon(comments, FontImage.MATERIAL_CHAT);
-        if (img.getHeight() > Display.getInstance().getDisplayHeight() / 2) {
+        if (img.getHeight() > Display.getInstance().getDisplayHeight() / 3) {
             System.out.println("Client.SingleRecette.addTab() 2");
-            img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 2);
+            img = img.scaledHeight(Display.getInstance().getDisplayHeight() / 3);
         }
         ScaleImageLabel image = new ScaleImageLabel(img);
         image.setUIID("Container");
@@ -236,4 +322,55 @@ public class SingleRecette extends BaseForm{
 
         });
     }
+    
+    private void initStarRankStyle(Style s, Image star) {
+        s.setBackgroundType(Style.BACKGROUND_IMAGE_TILE_BOTH);
+        s.setBorder(Border.createEmpty());
+        s.setBgImage(star);
+        s.setBgTransparency(0);
+    }
+    
+    private Container createStarRankSlider() {
+        Container cRate = new Container();
+        cRate.setSize(new Dimension(500, 50));
+        Slider starRank = new Slider();
+        starRank.setEditable(true);
+        starRank.setMinValue(0);
+        starRank.setMaxValue(5);
+        Font fnt = Font.createTrueTypeFont("native:MainLight", "native:MainLight").
+                derive(Display.getInstance().convertToPixels(5, true), Font.STYLE_PLAIN);
+        Style s = new Style(0xffff33, 0, fnt, (byte)0);
+        Image fullStar = FontImage.createMaterial(FontImage.MATERIAL_STAR, s).toImage();
+        s.setOpacity(100);
+        s.setFgColor(0);
+        NoteServices noteService = new NoteServices();
+        Note note = noteService.rechercheNote(recette);
+        if (note != null)
+            starRank.setProgress(note.getNote().intValue());
+        Image emptyStar = FontImage.createMaterial(FontImage.MATERIAL_STAR, s).toImage();
+        initStarRankStyle(starRank.getSliderEmptySelectedStyle(), emptyStar);
+        initStarRankStyle(starRank.getSliderEmptyUnselectedStyle(), emptyStar);
+        initStarRankStyle(starRank.getSliderFullSelectedStyle(), fullStar);
+        initStarRankStyle(starRank.getSliderFullUnselectedStyle(), fullStar);
+        starRank.setPreferredSize(new Dimension(fullStar.getWidth() *5 , fullStar.getHeight()-1));
+        starRank.addActionListener(l->{
+            int rate = starRank.getProgress();
+            System.out.println("Client.SingleRecette.createStarRankSlider() " + rate );
+            
+
+            if (note == null )
+            {
+                noteService.AjouterNote(new Note(Double.parseDouble(String.valueOf(rate)),recette,new Utilisateur(SessionUser.getId())));
+            }
+            else
+            {
+                noteService.ModifierNote(new Note(Double.parseDouble(String.valueOf(rate)),recette,new Utilisateur(SessionUser.getId())));
+            }
+            Double notes = noteService.MoyenneNote(recette.getIdRec());
+            moyenne.setText("Note : "+notes.toString()+"/5");
+        });
+        cRate.add(starRank);
+        return cRate;
+    }
+    
 }

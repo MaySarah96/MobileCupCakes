@@ -29,7 +29,7 @@ public class RecetteServices {
     public List<Recette> findRecette(int idUser)
     {
         List<Recette> recettes = new ArrayList<>();
-        
+        System.out.println("Services.RecetteServices.findRecette() "+idUser);
         con = new ConnectionRequest();
         con.setUrl("http://localhost/MobileCupCakes/ScriptPHP/Recettes/test.php?uid="+idUser+""); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {

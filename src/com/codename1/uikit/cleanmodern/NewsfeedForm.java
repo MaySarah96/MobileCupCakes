@@ -59,8 +59,8 @@ public class NewsfeedForm extends BaseForm {
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("news-item.jpg"), spacer1, "  ", "", " ");
-        addTab(swipe, res.getImage("dog.jpg"), spacer2, "  ", "", "");
+        addTab(swipe, res.getImage("allR.jpg"), spacer1, "  ", "", " ");
+        //addTab(swipe, res.getImage("dog.jpg"), spacer2, "  ", "", "");
 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");

@@ -109,6 +109,16 @@
         <val key="Label.fgColor" value="a2a1b8" />
         <font key="Label.font" type="ttf" face="0" style="0" size="0" name="native:MainLight" family="native:MainLight" sizeSettings="3" actualSize="2.5" />
         <val key="Label.transparency" value="0" />
+        <val key="LabelBody.fgColor" value="0" />
+        <font key="LabelBody.font" type="system" face="0" style="0" size="0" />
+        <val key="LabelBody.transparency" value="0" />
+        <val key="LabelComment.fgColor" value="0" />
+        <font key="LabelComment.font" type="system" face="0" style="1" size="0" />
+        <val key="LabelComment.margin" value="0,2,0,0" />
+        <val key="LabelComment.transparency" value="0" />
+        <val key="LabelDate.fgColor" value="999999" />
+        <font key="LabelDate.font" type="system" face="0" style="2" size="0" />
+        <val key="LabelDate.transparency" value="0" />
         <val key="LargeWhiteText.align" value="1" />
         <val key="LargeWhiteText.fgColor" value="ffffff" />
         <font key="LargeWhiteText.font" type="ttf" face="0" style="0" size="0" name="native:MainLight" family="native:MainLight" sizeSettings="3" actualSize="3.5" />
@@ -329,6 +339,9 @@
         <val key="WhiteSeparator.margin" value="0,0,0,0" />
         <val key="WhiteSeparator.padding" value="1,1,1,1" />
         <val key="WhiteSeparator.transparency" value="26" />
+        <border key="containerCommentaire.border" type="round" roundBorderColor="16777215" opacity="255" strokeColor="0" strokeOpacity="255" strokeThickness="0.5" strokeMM="false" shadowSpread="5" shadowOpacity="10" shadowX="0.29" shadowY="0.5" shadowBlur="10.0" shadowMM="false" rectangle="true" />
+        <val key="containerCommentaire.fgColor" value="000000" />
+        <val key="containerCommentaire.padding" value="5,5,20,0" />
         <val key="transparency" value="0" />
     </theme>
     <image name="timeline-background.jpg"  />

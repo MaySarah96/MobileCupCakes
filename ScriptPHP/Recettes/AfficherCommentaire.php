@@ -15,12 +15,9 @@ require_once __DIR__ . '/db_connect.php';
 // connecting to db
 $db = new DB_CONNECT();
 
-if (isset($_GET['uid'])) {
-    $pid = $_GET['uid'];
-	if($pid == 0)
-		$result = mysql_query("SELECT * FROM recette r , categorie_Rec cr where r.idCatRec=cr.idCatRec");
-	else
-		$result = mysql_query("SELECT * FROM recette r , categorie_Rec cr where r.idCatRec=cr.idCatRec and r.idUser=$pid");
+if (isset($_GET['rid'])) {
+    $idRec = $_GET['rid'];
+	$result = mysql_query("select * from commentaire c,utilisateur u where c.idRec='$idRec' and c.ancestors='' and c.state=0 and c.idUser=u.id order by idCmnt DESC");
 	
     if (mysql_num_rows($result) > 0) {
     // looping through all results
@@ -29,16 +26,16 @@ if (isset($_GET['uid'])) {
     
     while ($row = mysql_fetch_array($result)) {
         // temp user array
-        $recette = array();
-        $recette["nomRec"] = $row["nomRec"];
-		$recette["nomCatRec"] = $row["nomCatRec"];
-		$recette["idCatRec"] = $row["idCatRec"];
-		$recette["imageRec"] = $row["imageRec"];
-		$desc = utf8_encode ( $row["descriptionRec"]) ;
-		$recette["descriptionRec"] = $desc;
-		$recette["idRec"] = $row["idRec"];
+        $commentaire = array();
+        $commentaire["idCmnt"] = $row["idCmnt"];
+		$body = utf8_encode ( $row["body"]) ;
+		$commentaire["body"] = $body ;
+		$commentaire["created_at"] = $row["created_at"];
+		$commentaire["ancestors"] = $row["ancestors"];
+		$commentaire["idUser"] = $row["idUser"];
+		$commentaire["username"] = $row["username"];
         // push single login into final response array
-        array_push($response["info"], $recette);
+        array_push($response["info"], $commentaire);
     }
     // success
    $response["success"] = 1;

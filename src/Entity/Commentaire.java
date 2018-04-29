@@ -16,7 +16,7 @@ public class Commentaire  {
     private String body;
     private String ancestors;
     private int depth;
-    private Date createdAt;
+    private String createdAt;
     private int state;
     private Integer idCmnt;
     private Thread idRec;
@@ -55,7 +55,7 @@ public class Commentaire  {
         this.idUser = idUser;
     }
 
-    public Commentaire(Integer idCmnt,String body, String ancestors, int depth, Date createdAt, int state,  Thread idRec, Utilisateur idUser) {
+    public Commentaire(Integer idCmnt,String body, String ancestors, int depth, String createdAt, int state,  Thread idRec, Utilisateur idUser) {
         this.body = body;
         this.ancestors = ancestors;
         this.depth = depth;
@@ -66,7 +66,7 @@ public class Commentaire  {
         this.idUser = idUser;
     }
 
-    public Commentaire(Integer idCmnt, String body, String ancestors, int depth, Date createdAt, int state) {
+    public Commentaire(Integer idCmnt, String body, String ancestors, int depth, String createdAt, int state) {
         this.idCmnt = idCmnt;
         this.body = body;
         this.ancestors = ancestors;
@@ -99,11 +99,11 @@ public class Commentaire  {
         this.depth = depth;
     }
 
-    public Date getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 
