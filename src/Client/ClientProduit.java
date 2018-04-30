@@ -168,7 +168,7 @@ public class ClientProduit extends BaseForm {
         ProduitService ps = new ProduitService();
         List<Produit> p = ps.findUser();
         for(Produit pr : p){
-                        addButton(res.getImage("news-item.jpg"), pr.getNomProd(),pr.getQteStockProd(),pr);
+            addButton(res.getImage("news-item.jpg"), pr.getNomProd(),pr.getQteStockProd(),pr);
         }
     }
 

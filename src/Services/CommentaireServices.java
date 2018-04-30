@@ -53,6 +53,54 @@ public class CommentaireServices {
         NetworkManager.getInstance().addToQueueAndWait(con);
     }
     
+    public void ModifierCommentaire(Commentaire comment){
+        con = new ConnectionRequest();
+        con.setUrl("http://localhost/MobileCupCakes/ScriptPHP/Recettes/ModifierCommentaire.php?idCmnt="+comment.getIdCmnt()+"&body="+comment.getBody()); 
+        con.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+                public void actionPerformed(NetworkEvent evt) {
+                    byte[] data = (byte[]) evt.getMetaData(); 
+                    String s = new String(data);  
+                    if (s.equals("success")) {
+                        Dialog.show("Succés", "Modification effectué", "Ok", null);
+                        
+                       /* if (user.getRoles()=="")
+                            new UserAccueil().startAccueil(user);
+                        else
+                            new UserAccueil2().startAccueil(user);*/
+                    } 
+                    else {
+                        Dialog.show("Echec", "Erreur", "Ok", null);
+                    }
+                }
+            });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+    }
+    
+    public void AjouterReply(String idRec , String body,String ancestors){
+        con = new ConnectionRequest();
+        con.setUrl("http://localhost/MobileCupCakes/ScriptPHP/Recettes/AjouterReply.php?uid="+SessionUser.getId()+"&rid="+idRec+"&body="+body+"&ancestors="+ancestors); 
+        con.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+                public void actionPerformed(NetworkEvent evt) {
+                    byte[] data = (byte[]) evt.getMetaData(); 
+                    String s = new String(data);  
+                    if (s.equals("success")) {
+                        Dialog.show("Succés", "ajout effectué", "Ok", null);
+                        
+                       /* if (user.getRoles()=="")
+                            new UserAccueil().startAccueil(user);
+                        else
+                            new UserAccueil2().startAccueil(user);*/
+                    } 
+                    else {
+                        Dialog.show("Echec", "comment existe deja", "Ok", null);
+                    }
+                }
+            });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+    }
+    
     public List<Commentaire>findComment(int idRec){
         List<Commentaire> listComment = new ArrayList<>();
         con = new ConnectionRequest();
@@ -126,5 +174,29 @@ public class CommentaireServices {
             });
         NetworkManager.getInstance().addToQueueAndWait(con);
         return listComment;
+    }
+    
+    public void DeleteComment(int idCmnt){
+        con = new ConnectionRequest();
+        con.setUrl("http://localhost/MobileCupCakes/ScriptPHP/Recettes/DeleteCommentaire.php?idCmnt="+idCmnt); 
+        con.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+                public void actionPerformed(NetworkEvent evt) {
+                    byte[] data = (byte[]) evt.getMetaData(); 
+                    String s = new String(data);  
+                    if (s.equals("success")) {
+                        Dialog.show("Succés", "suppression effectué", "Ok", null);
+                        
+                       /* if (user.getRoles()=="")
+                            new UserAccueil().startAccueil(user);
+                        else
+                            new UserAccueil2().startAccueil(user);*/
+                    } 
+                    else {
+                        Dialog.show("Echec", "erreur", "Ok", null);
+                    }
+                }
+            });
+        NetworkManager.getInstance().addToQueueAndWait(con);
     }
 }

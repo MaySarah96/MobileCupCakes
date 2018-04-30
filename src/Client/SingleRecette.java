@@ -36,6 +36,8 @@ import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.URLImage;
+import com.codename1.ui.events.ActionEvent;
+import com.codename1.ui.events.ActionListener;
 import com.codename1.ui.geom.Dimension;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
@@ -45,6 +47,8 @@ import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Border;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import com.codename1.ui.validation.LengthConstraint;
+import com.codename1.ui.validation.Validator;
 import com.codename1.uikit.cleanmodern.BaseForm;
 import java.io.IOException;
 import java.util.List;
@@ -58,7 +62,7 @@ public class SingleRecette extends BaseForm{
     Label moyenne ;
     EncodedImage enc;
     Container cnt,cntForm,cntComment ;
-    Recette recette ;
+    public Recette recette ;
     
     public SingleRecette (Resources res, Recette recette) throws IOException {
         super("SingleRecette", BoxLayout.y());
@@ -167,6 +171,7 @@ public class SingleRecette extends BaseForm{
             
 
         });*/
+        
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
 
         add(LayeredLayout.encloseIn(
@@ -193,6 +198,11 @@ public class SingleRecette extends BaseForm{
         // commentaire
         Container cBtnComment = new Container(new FlowLayout(Component.RIGHT,Component.CENTER));
         Button btnComment = new Button("Commenter");
+        btnComment.getStyle().setPadding(1, 1, 1, 1);
+        Validator valid=new Validator(); 
+        valid.addConstraint(CommentText, new LengthConstraint(2));
+        valid.addSubmitButtons(btnComment);
+        valid.setShowErrorMessageForFocusedComponent(true); 
         btnComment.addActionListener(l->{
             commentService.AjouterCommentaire(recette.getIdRec().toString(), CommentText.getText());
             removeAll();
@@ -227,20 +237,110 @@ public class SingleRecette extends BaseForm{
             created_at.setUIID("LabelDate");
             Label body = new Label(comment.getBody());
             body.setUIID("LabelBody");
+            
             Container contNameDate = new Container(BoxLayout.x());
+            Container contDeleteUpdate = new Container(BoxLayout.x());
+            Container contReply = new Container(BoxLayout.y());
+            
+            contNameDate.getStyle().setMargin(4, 0, 0, 0);
             contNameDate.add(username).add(created_at);
-            contCom.add(contNameDate).add(body);
+            Button Delete = new Button(res.getImage("Corbeille.png").scaled(15, 15));
+            Delete.getStyle().setPadding(1, 1, 1, 1);
+            
+            Button Update = new Button(res.getImage("refresh.png").scaled(15, 15));
+            Update.getStyle().setPadding(1, 1, 1, 1);
+            //Label Update = new Label(res.getImage("corbeille.png"));
+            
+            Delete.addActionListener(l->{
+                commentService.DeleteComment(comment.getIdCmnt());
+                try {
+                    removeAll();
+                    start();
+                } catch (IOException ex) {
+                }
+            });
+            
+            Update.addActionListener(l->{
+                Update.remove();
+                TextArea commentUpdate = new TextArea(comment.getBody());
+                Button Modifier = new Button("Modifier");
+                contReply.add(commentUpdate).add(Modifier);
+                Validator valid=new Validator(); 
+                valid.addConstraint(commentUpdate, new LengthConstraint(2));
+                valid.addSubmitButtons(Modifier);
+                valid.setShowErrorMessageForFocusedComponent(true); 
+                Modifier.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent l) {
+                        CommentaireServices commentService = new CommentaireServices();
+                        comment.setBody(commentUpdate.getText());
+                        commentService.ModifierCommentaire(comment);
+                        removeAll();
+                        try {
+                            start();
+                        } catch (IOException ex) {
+                        }
+                    }
+                });
+                
+            });
+            
+            contDeleteUpdate.add(body).add(Update).add(Delete);
+            contDeleteUpdate.getStyle().setMargin(0, 0, 0, 0);
+            contCom.add(contNameDate).add(contDeleteUpdate);
             listCom.remove(0);
             contCom.setUIID("containerCommentaire");
             contCom.getStyle().setMarginLeft(comment.getAncestors().length() *3);
             
+            
+            Container contBtnReply = new Container(new FlowLayout(Component.RIGHT,Component.CENTER));
+            Button Reply = new Button("Reply");
+            Reply.getStyle().setPadding(1, 1, 1, 1);
+            Reply.addActionListener(l->{
+                Reply.remove();
+                TextArea CommentReply = new TextArea(2, 3);
+                CommentReply.setHint("Répondre un commentaire");
+                
+                Button Repondre = new Button("Répondre");
+                Repondre.getStyle().setPadding(1, 1, 1, 1);
+                String anc = comment.getIdCmnt().toString();
+                if (!comment.getAncestors().equals(""))
+                    anc = comment.getAncestors()+"/"+comment.getIdCmnt().toString();
+                Container contR = new Container(new FlowLayout(Component.RIGHT,Component.CENTER));
+                contR.add(Repondre);
+                AjouterReply(Repondre,anc , CommentReply);
+                contReply.add(CommentReply);
+                contReply.add(contR);
+            });
+            contBtnReply.add(Reply);
+            contReply.add(contBtnReply);
+            
             //contCom.getStyle().setBorder(Border.createLineBorder(1));
             cntForm.add(contCom);
+            cntForm.add(contReply);
             List<Commentaire> lisComment = commentService.findReplyComment(ancestors);
             if(lisComment.size()!= 0){
                 System.out.println("Client.SingleRecette.AfficherComment() d5al c bon lel reply");
                 AfficherComment(lisComment, ancestors, commentService);}
         }
+    }
+    
+    public void AjouterReply(Button btnReply,String ancestors,TextArea body)
+    {
+        CommentaireServices commentService = new CommentaireServices();
+        Validator valid=new Validator(); 
+        valid.addConstraint(body, new LengthConstraint(2));
+        valid.addSubmitButtons(btnReply);
+        valid.setShowErrorMessageForFocusedComponent(true); 
+        btnReply.addActionListener(l->{
+            System.out.println("body :" + body );
+            commentService.AjouterReply(recette.getIdRec().toString(), body.getText(), ancestors);
+            removeAll();
+            try {
+                start();
+            } catch (IOException ex) {
+            }
+        });
     }
 
     private void updateArrowPosition(Button b, Label arrow) {

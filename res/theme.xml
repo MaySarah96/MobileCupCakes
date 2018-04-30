@@ -5,6 +5,7 @@
     <image name="allR.jpg"  />
     <image name="Birthday-Cupcakes-Featured.jpg"  />
     <image name="confirmation-background.jpg"  />
+    <image name="Corbeille.png"  />
     <image name="dog.jpg"  />
     <image name="facebook-logo.png" type="multi"  />
     <image name="Logo.png" type="multi"  />
@@ -20,6 +21,7 @@
     <image name="on-off-on.png" type="multi"  />
     <image name="profile-background.jpg"  />
     <image name="profile-pic.jpg" type="multi"  />
+    <image name="refresh.png"  />
     <image name="signin-background.jpg"  />
     <image name="signup-background.jpg"  />
     <image name="smily.png" type="multi"  />
@@ -111,13 +113,22 @@
         <val key="Label.transparency" value="0" />
         <val key="LabelBody.fgColor" value="0" />
         <font key="LabelBody.font" type="system" face="0" style="0" size="0" />
+        <val key="LabelBody.margin" value="0,2,0,0" />
         <val key="LabelBody.transparency" value="0" />
+        <val key="LabelButton.align" value="4" />
+        <border key="LabelButton.border" type="round" roundBorderColor="16777215" opacity="255" strokeColor="0" strokeOpacity="255" strokeThickness="0.5" strokeMM="false" shadowSpread="10" shadowOpacity="5" shadowX="0.5" shadowY="0.5" shadowBlur="10.0" shadowMM="false" rectangle="true" />
+        <val key="LabelButton.fgColor" value="666666" />
+        <font key="LabelButton.font" type="system" face="0" style="0" size="8" />
+        <val key="LabelButton.margin" value="0,0,1,0" />
+        <val key="LabelButton.padding" value="0,0,15,15" />
+        <val key="LabelButton.transparency" value="0" />
         <val key="LabelComment.fgColor" value="0" />
         <font key="LabelComment.font" type="system" face="0" style="1" size="0" />
-        <val key="LabelComment.margin" value="0,2,0,0" />
+        <val key="LabelComment.margin" value="2,0,0,0" />
         <val key="LabelComment.transparency" value="0" />
         <val key="LabelDate.fgColor" value="999999" />
         <font key="LabelDate.font" type="system" face="0" style="2" size="0" />
+        <val key="LabelDate.margin" value="0,0,0,0" />
         <val key="LabelDate.transparency" value="0" />
         <val key="LargeWhiteText.align" value="1" />
         <val key="LargeWhiteText.fgColor" value="ffffff" />
