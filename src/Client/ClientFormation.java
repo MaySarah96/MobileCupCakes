@@ -5,8 +5,10 @@
  */
 package Client;
 
-import Entity.Recette;
-import Services.RecetteServices;
+import Entity.Formation;
+import Entity.Session;
+import Services.FormationServices;
+import Services.SessionServices;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
 import com.codename1.ui.Button;
@@ -20,7 +22,6 @@ import com.codename1.ui.Container;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.FontImage;
-import com.codename1.ui.Form;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
@@ -28,16 +29,16 @@ import com.codename1.ui.RadioButton;
 import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.URLImage;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
-import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
-import com.codename1.ui.util.UIBuilder;
 import com.codename1.uikit.cleanmodern.BaseForm;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -49,10 +50,13 @@ public class ClientFormation extends BaseForm {
     Resources res;
 
     EncodedImage enc;
-    Container cnt,cntForm ;
-    
-    public ClientFormation (Resources res) {
+    Container cnt, cntForm;
+
+    public ClientFormation(Resources res) {
+        
+        
         super("Formation", BoxLayout.y());
+        this.res = res;
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
@@ -63,12 +67,14 @@ public class ClientFormation extends BaseForm {
         super.addSideMenu(res);
         tb.addSearchCommand(e -> {
         });
+        
+                
         Tabs swipe = new Tabs();
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("news-item.jpg"), spacer1, "  ", "", " ");
-        addTab(swipe, res.getImage("dog.jpg"), spacer2, "  ", "", "");
+         addTab(swipe, res.getImage("allR.jpg"), spacer1, "  ", "", " ");
+        //addTab(swipe, res.getImage("dog.jpg"), spacer2, "  ", "", "");
 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -107,69 +113,117 @@ public class ClientFormation extends BaseForm {
         });
 
         Component.setSameSize(radioContainer, spacer1, spacer2);
-        add(LayeredLayout.encloseIn(swipe, radioContainer,button));
+        add(LayeredLayout.encloseIn(swipe, radioContainer, button));
 
         ButtonGroup barGroup = new ButtonGroup();
-                cntForm=new Container(BoxLayout.y());
-
+        cntForm = new Container(BoxLayout.y());
+       
         RadioButton Formation = RadioButton.createToggle("Liste", barGroup);
         Formation.setUIID("SelectBar");
         Formation.addActionListener(e -> {
-                cntForm.removeAll();
-                cntForm=new Container(BoxLayout.y());
-                add(cntForm);
-                addButton(res.getImage("news-item.jpg"), "Liste des Formation");
-                addButton(res.getImage("news-item.jpg"), "Formation En cours");
-                addButton(res.getImage("news-item.jpg"), "Formation Finies");
-
-
-        });
-        RadioButton Promotion = RadioButton.createToggle("En Cours", barGroup);
-        Promotion.setUIID("SelectBar");
-        Promotion.addActionListener(e -> {
-                            cntForm.removeAll();
-                            cntForm=new Container(BoxLayout.y());
-                add(cntForm);
-                addButton(res.getImage("news-item.jpg"), "Promotion Formation");
-                addButton(res.getImage("news-item.jpg"), "Promotion Produits");
+            cntForm.removeAll();
+            cntForm = new Container(BoxLayout.y());
+            add(cntForm);
 
             
+            
+            FormationServices serviceformation = new FormationServices();
+            List<Formation> listF = serviceformation.AfficherListFormations();
+            try {
+                enc = EncodedImage.create("/giphy.gif");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+            
+            for (Formation f : listF) {
+                Image image = URLImage.createToStorage(enc, f.getImageform(), "http://localhost:8088/final/web/public/uploads/brochures/Formateur/" + f.getImageform());
+                addButtonFormation(f.getLongitude(),f.getAtitude(),f.getIdFor(), image, f.getNomFor(), f.getDateFor(), f);
+                
+            }
 
         });
-        RadioButton Recettes = RadioButton.createToggle("Finie", barGroup);
-        Recettes.setUIID("SelectBar");
-        Recettes.addActionListener(e -> {
-                               cntForm.removeAll();
-                               cntForm=new Container(BoxLayout.y());
-                add(cntForm);
-                addButton(res.getImage("news-item.jpg"), "Mes Recettes");
-                addButton(res.getImage("news-item.jpg"), "Les Recettes");
+        RadioButton SessionEncours = RadioButton.createToggle("En Cours", barGroup);
+        SessionEncours.setUIID("SelectBar");
+        SessionEncours.addActionListener(e -> {
+
+            cntForm.removeAll();
+            cntForm = new Container(BoxLayout.y());
+            add(cntForm);
+            SessionServices sessionencours = new SessionServices();
+            List<Session> listS = sessionencours.findSessionENCOURS();
+            try {
+                enc = EncodedImage.create("/giphy.gif");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            for (Session s : listS) {
+                Image image = URLImage.createToStorage(enc, s.getImagesess(), "http://localhost:8088/final/web/public/uploads/brochures/Formateur/" + s.getImagesess());
+
+                addButtonSession(image, s.getNomSes(), s.getDateDebSes(), s.getDateFinSes());
+            }
+
+        });
+        RadioButton SessionFinies = RadioButton.createToggle("Finie", barGroup);
+        SessionFinies.setUIID("SelectBar");
+        SessionFinies.addActionListener(e -> {
+            cntForm.removeAll();
+            cntForm = new Container(BoxLayout.y());
+            add(cntForm);
+            SessionServices sessionencours = new SessionServices();
+            List<Session> listS = sessionencours.findSessionFINIES();
+            try {
+                enc = EncodedImage.create("/giphy.gif");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            for (Session s : listS) {
+                Image image = URLImage.createToStorage(enc, s.getImagesess(), "http://localhost:8088/final/web/public/uploads/brochures/Formateur/" + s.getImagesess());
+                addButtonSession(image, s.getNomSes(), s.getDateDebSes(), s.getDateFinSes());
 
             }
 
+        }
         );
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
 
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(3, Formation, Promotion, Recettes),
+                GridLayout.encloseIn(3, Formation, SessionEncours, SessionFinies),
                 FlowLayout.encloseBottom(arrow)
         ));
 
-        Formation.setSelected(true);
+        Formation.setSelected(false);
         arrow.setVisible(false);
         addShowListener(e -> {
             arrow.setVisible(true);
             updateArrowPosition(Formation, arrow);
         });
         bindButtonSelection(Formation, arrow);
-        bindButtonSelection(Promotion, arrow);
-        bindButtonSelection(Recettes, arrow);
+        bindButtonSelection(SessionEncours, arrow);
+        bindButtonSelection(SessionFinies, arrow);
 
         // special case for rotation
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
 
+        add(cntForm);
+
+        FormationServices serviceformation = new FormationServices();
+        List<Formation> listF = serviceformation.AfficherListFormations();
+        try {
+            enc = EncodedImage.create("/giphy.gif");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+
+        for (Formation f : listF) {
+            Image image = URLImage.createToStorage(enc, f.getImageform(), "http://localhost:8088/final/web/public/uploads/brochures/Formateur/" + f.getImageform());
+            addButtonFormation(f.getLongitude(),f.getAtitude(),f.getIdFor(), image, f.getNomFor(), f.getDateFor(), f);
+
+        }
+        
     }
 
     private void updateArrowPosition(Button b, Label arrow) {
@@ -216,30 +270,75 @@ public class ClientFormation extends BaseForm {
         swipe.addTab("", page1);
     }
 
-    private void addButton(Image img, String title) {
+    private void addButtonFormation(String longt,String alt,int idfor, Image img, String title, String dateFor, Formation formation) {
+
+        int height = Display.getInstance().convertToPixels(11.5f);
+        int width = Display.getInstance().convertToPixels(14f);
+        Button imageFor = new Button(img.fill(width, height));
+        imageFor.setUIID("Label");
+        cnt = BorderLayout.west(imageFor);
+        cnt.setLeadComponent(imageFor);
+        // WebBrowser browser = new WebBrowser();
+        //browser.setPage(webb, "");
         
+        TextArea ta = new TextArea(title);
+        ta.setUIID("NewsTopLine");
+        ta.setEditable(false);
+        TextArea datef = new TextArea(dateFor);
+        datef.setUIID("NewsTopLine");
+        datef.setEditable(false);
+        
+        //bouton map
+        Button map = new Button("Afficher localisation");
+        map.setUIID("NewsTopLine");
+        map.getStyle().setFgColor(CENTER);
+        cnt.add(BorderLayout.CENTER,
+                BoxLayout.encloseY(
+                        ta, datef
+                //browser
+                ));
+        cntForm.add(cnt).add(map);
+        imageFor.addActionListener(e -> {
+
+            new SignleFormation(res, formation).show();
+        });
+        //inscription client
+        map.addActionListener(e -> {
+            System.out.println("map formation");
+            //Map place=new Map();
+            //GMap mm=new GMap();
+                     //mm.AfficherMap();
+        });
+
+    }
+
+    private void addButtonSession(Image img, String nomSes, String dateDeb, String dateFin) {
+
         int height = Display.getInstance().convertToPixels(11.5f);
         int width = Display.getInstance().convertToPixels(14f);
         Button image = new Button(img.fill(width, height));
         image.setUIID("Label");
         cnt = BorderLayout.west(image);
-              
 
         cnt.setLeadComponent(image);
-        TextArea ta = new TextArea(title);
+        TextArea ta = new TextArea(nomSes);
         ta.setUIID("NewsTopLine");
         ta.setEditable(false);
+
+        TextArea datedeb = new TextArea(dateDeb);
+        datedeb.setUIID("NewsTopLine");
+        datedeb.setEditable(false);
+
+        TextArea datefin = new TextArea(dateFin);
+        datefin.setUIID("NewsTopLine");
+        datefin.setEditable(false);
+
         cnt.add(BorderLayout.CENTER,
                 BoxLayout.encloseY(
-                        ta
-                       
-                        ) );
+                        ta, datedeb, datefin
+                ));
         cntForm.add(cnt);
-        image.addActionListener(e -> {
-            //Client.ClientCommande clientTemplate = new ClientCommande();
-            //clientTemplate.startClientCommande();
-        });
-        
+
     }
 
     private void bindButtonSelection(Button b, Label arrow) {
@@ -251,4 +350,5 @@ public class ClientFormation extends BaseForm {
 
         });
     }
+
 }

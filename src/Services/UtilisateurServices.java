@@ -26,11 +26,11 @@ public class UtilisateurServices {
     private ConnectionRequest con;
     
     public Utilisateur findUser(String login)
-    {
+     {
         Utilisateur user = new  Utilisateur();
         user.setId(null);
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/MobileCupCakes/ScriptPHP/Utilisateur/info_id.php?uid='" +login+"'"); 
+        con.setUrl("http://localhost:8088/MobileCupCakes/ScriptPHP/Utilisateur/info_id.php?uid='" +login+"'"); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {

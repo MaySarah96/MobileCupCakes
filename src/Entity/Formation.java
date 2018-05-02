@@ -13,12 +13,12 @@ import java.util.Date;
  * @author escobar
  */
 public class Formation  {
-private Integer idFor;
+    private Integer idFor;
     private String nomFor;
     private String place;
     private String etatFor;
     private String descriptionFor;
-    private Date dateFor;
+    private String dateFor;
     private String imageform;
     private Collection<Session> sessionCollection;
     private TypeFormation idTypeFor;
@@ -43,7 +43,7 @@ private Integer idFor;
     }
     public Formation() {
     }
-     public Formation(String nomFor, String descriptionFor, Date dateFor, String imageform, TypeFormation idTypeFor,String longitude,String atitude) {
+     public Formation(String nomFor, String descriptionFor, String dateFor, String imageform, TypeFormation idTypeFor,String longitude,String atitude) {
         this.nomFor = nomFor;
         this.place = place;
         this.descriptionFor = descriptionFor;
@@ -73,7 +73,7 @@ private Integer idFor;
    
 
 public Formation(int idFor,String nomFor, String place, String etatFor, String descriptionFor, 
-            Date dateFor, Utilisateur idUser, TypeFormation idTypeFor) {
+            String dateFor, Utilisateur idUser, TypeFormation idTypeFor) {
         this.idFor=idFor;
         this.nomFor = nomFor;
         this.place = place;
@@ -84,7 +84,7 @@ public Formation(int idFor,String nomFor, String place, String etatFor, String d
         this.idTypeFor = idTypeFor;
     }
     public Formation(String nomFor, String place, String etatFor, String descriptionFor, 
-            Date dateFor, Utilisateur idUser, TypeFormation idTypeFor) {
+            String dateFor, Utilisateur idUser, TypeFormation idTypeFor) {
         this.nomFor = nomFor;
         this.place = place;
         this.etatFor = etatFor;
@@ -94,7 +94,7 @@ public Formation(int idFor,String nomFor, String place, String etatFor, String d
         this.idTypeFor = idTypeFor;
     }
 
-    public Formation(String nomFor, String place, String descriptionFor, Date dateFor, String imageform, TypeFormation idTypeFor) {
+    public Formation(String nomFor, String place, String descriptionFor, String dateFor, String imageform, TypeFormation idTypeFor) {
         this.nomFor = nomFor;
         this.place = place;
         this.descriptionFor = descriptionFor;
@@ -151,11 +151,11 @@ public Formation(int idFor,String nomFor, String place, String etatFor, String d
         this.descriptionFor = descriptionFor;
     }
 
-    public Date getDateFor() {
+    public String getDateFor() {
         return dateFor;
     }
 
-    public void setDateFor(Date dateFor) {
+    public void setDateFor(String dateFor) {
         this.dateFor = dateFor;
     }
 

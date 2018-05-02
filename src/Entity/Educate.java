@@ -12,7 +12,7 @@ import java.util.Date;
  * @author escobar
  */
 public class Educate {
-  private Date dateIscri;
+    private String dateIscri;
     private String etatEduc;
     private String etatNotif;
     private Session session;
@@ -32,7 +32,7 @@ public class Educate {
         this.etatNotif = etatNotif;
     }
 
-    public Educate(Date dateIscri, String etatEduc) {
+    public Educate(String dateIscri, String etatEduc) {
         this.dateIscri = dateIscri;
         this.etatEduc = etatEduc;
     }
@@ -40,11 +40,11 @@ public class Educate {
     
 
 
-    public Date getDateIscri() {
+    public String getDateIscri() {
         return dateIscri;
     }
 
-    public void setDateIscri(Date dateIscri) {
+    public void setDateIscri(String dateIscri) {
         this.dateIscri = dateIscri;
     }
 

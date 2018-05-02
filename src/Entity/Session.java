@@ -14,9 +14,9 @@ import java.util.Date;
  */
 public class Session {
 
-     private Integer idSes;
-    private Date dateDebSes;
-    private Date dateFinSes;
+    private Integer idSes;
+    private String dateDebSes;
+    private String dateFinSes;
     private Integer capaciteSes;
     private String etatSes;
     private String imagesess;
@@ -31,7 +31,7 @@ public class Session {
     public Session() {
     }
 
-      public Session(Date dateDebSes, Date dateFinSes, Integer capaciteSes, String etatSes, String imagesess, Double prixSes, Double nvPrixSes, String nomSes, Formation idFor) {
+      public Session(String dateDebSes, String dateFinSes, Integer capaciteSes, String etatSes, String imagesess, Double prixSes, Double nvPrixSes, String nomSes, Formation idFor) {
         this.dateDebSes = dateDebSes;
         this.dateFinSes = dateFinSes;
         this.capaciteSes = capaciteSes;
@@ -42,7 +42,7 @@ public class Session {
         this.nomSes = nomSes;
         this.idFor = idFor;
     }
-    public Session(Date dateDebSes, Date dateFinSes, Integer capaciteSes,String imagesess, Double prixSes,String nomSes, Formation idFor) {
+    public Session(String dateDebSes, String dateFinSes, Integer capaciteSes,String imagesess, Double prixSes,String nomSes, Formation idFor) {
         this.dateDebSes = dateDebSes;
         this.dateFinSes = dateFinSes;
         this.capaciteSes = capaciteSes;
@@ -51,7 +51,7 @@ public class Session {
         this.nomSes = nomSes;
         this.idFor = idFor;
     }
- public Session(int idSes,Date dateDebSes, Date dateFinSes, Integer capaciteSes, String etatSes, String imagesess, Double prixSes, Double nvPrixSes, String nomSes, Formation idFor) {
+ public Session(int idSes,String dateDebSes, String dateFinSes, Integer capaciteSes, String etatSes, String imagesess, Double prixSes, Double nvPrixSes, String nomSes, Formation idFor) {
         this.idSes=idSes;
         this.dateDebSes = dateDebSes;
         this.dateFinSes = dateFinSes;
@@ -82,19 +82,19 @@ public class Session {
         this.idSes = idSes;
     }
 
-    public Date getDateDebSes() {
+    public String getDateDebSes() {
         return dateDebSes;
     }
 
-    public void setDateDebSes(Date dateDebSes) {
+    public void setDateDebSes(String dateDebSes) {
         this.dateDebSes = dateDebSes;
     }
 
-    public Date getDateFinSes() {
+    public String getDateFinSes() {
         return dateFinSes;
     }
 
-    public void setDateFinSes(Date dateFinSes) {
+    public void setDateFinSes(String dateFinSes) {
         this.dateFinSes = dateFinSes;
     }
 

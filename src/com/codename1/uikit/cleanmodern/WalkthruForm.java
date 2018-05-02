@@ -90,6 +90,10 @@ public class WalkthruForm extends BaseForm {
                         {
                             new NewsfeedForm(res).show();
                         }
+                        if(user.getRoles().equals("a:1:{i:0;s:14:\"ROLE_FORMATEUR\";}"))
+                        {
+                            new NewsfeedFormFormateur(res).show();
+                        }
                     }
 
                 }
