@@ -41,6 +41,14 @@ public class Commande {
         this.etatCmd = etatCmd;
     }
 
+    public Commande(Integer idCmd, Date dateCmd, Double montantCmd, Date dateLivCmd, String addLiv) {
+        this.idCmd = idCmd;
+        this.dateCmd = dateCmd;
+        this.montantCmd = montantCmd;
+        this.dateLivCmd = dateLivCmd;
+        this.addLiv = addLiv;
+    }
+
     public Commande(Integer idCmd, String etatLivCmd) {
         this.idCmd = idCmd;
         this.etatLivCmd = etatLivCmd;

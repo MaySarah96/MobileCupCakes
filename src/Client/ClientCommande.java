@@ -17,6 +17,7 @@ import com.codename1.ui.util.Resources;
 import com.codename1.ui.util.UIBuilder;
 import java.util.List;
 import Entity.Commande;
+import Entity.SessionUser;
 import com.codename1.components.ImageViewer;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
@@ -27,6 +28,7 @@ import static com.codename1.ui.Component.BOTTOM;
 import static com.codename1.ui.Component.CENTER;
 import static com.codename1.ui.Component.LEFT;
 import static com.codename1.ui.Component.RIGHT;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.Display;
 import com.codename1.ui.EncodedImage;
 import com.codename1.ui.FontImage;
@@ -42,6 +44,7 @@ import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.uikit.cleanmodern.BaseForm;
+import java.io.IOException;
 
 /**
  *
@@ -52,11 +55,12 @@ public class ClientCommande extends BaseForm {
     Resources res;
 
     EncodedImage enc;
-    Container cnt,cntForm ;
-    
+    Container cnt, cntForm;
+
     public ClientCommande(Resources res) {
         super("Commandes", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
+        this.res=res;
         setToolbar(tb);
         getTitleArea().setUIID("Container");
         setTitle("Commandes");
@@ -70,8 +74,7 @@ public class ClientCommande extends BaseForm {
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("news-item.jpg"), spacer1, "  ", "", " ");
-        addTab(swipe, res.getImage("dog.jpg"), spacer2, "  ", "", "");
+        addTab(swipe, res.getImage("panier.jpg"), spacer1, "  ", "", " ");
 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -110,45 +113,69 @@ public class ClientCommande extends BaseForm {
         });
 
         Component.setSameSize(radioContainer, spacer1, spacer2);
-        add(LayeredLayout.encloseIn(swipe, radioContainer,button));
-
+        add(LayeredLayout.encloseIn(swipe, radioContainer, button));
+        CommandeServices cs = new CommandeServices();
         ButtonGroup barGroup = new ButtonGroup();
         RadioButton all = RadioButton.createToggle("Prete", barGroup);
         all.setUIID("SelectBar");
-        cntForm=new Container(BoxLayout.y());
+        cntForm = new Container(BoxLayout.y());
+        List<Commande> Prete = cs.findCommandePrete(SessionUser.getId());
         all.addActionListener(e -> {
+            if (Prete != null) {
                 cntForm.removeAll();
-                cntForm=new Container(BoxLayout.y());
+                cntForm = new Container(BoxLayout.y());
                 add(cntForm);
-                addButton(res.getImage("news-item.jpg"), "testtttt");
-            
+                for (Commande c : Prete) {
+                    addButton(res.getImage("pdf.png"), c.getAddLiv(), c.getMontantCmd(),c);
+                }
+            } else {
+                cntForm.removeAll();
+                cntForm = new Container(BoxLayout.y());
+                Dialog.show("Info", "pas de commande en Prete", "ok", null);
+                add(cntForm);
 
+            }
         });
+        List<Commande> Livre = cs.findCommandeLivre(SessionUser.getId());
         RadioButton Formation = RadioButton.createToggle("Livrée", barGroup);
         Formation.setUIID("SelectBar");
         Formation.addActionListener(e -> {
+            if (Livre != null) {
                 cntForm.removeAll();
-                cntForm=new Container(BoxLayout.y());
+                cntForm = new Container(BoxLayout.y());
                 add(cntForm);
-                addButton(res.getImage("news-item.jpg"), "Liste des Formation");
-                addButton(res.getImage("news-item.jpg"), "Formation En cours");
-                addButton(res.getImage("news-item.jpg"), "Formation Finies");
+                for (Commande c : Livre) {
+                    addButton(res.getImage("pdf.png"), c.getAddLiv(), c.getMontantCmd(),c);
+                }
+            } else {
+                cntForm.removeAll();
+                cntForm = new Container(BoxLayout.y());
+                Dialog.show("Info", "pas de commande Livree", "ok", null);
+                add(cntForm);
 
+            }
 
         });
+        List<Commande> Cour = cs.findCommandeEnCour(SessionUser.getId());
         RadioButton Promotion = RadioButton.createToggle("En Cours", barGroup);
         Promotion.setUIID("SelectBar");
         Promotion.addActionListener(e -> {
-                            cntForm.removeAll();
-                            cntForm=new Container(BoxLayout.y());
+            if (Cour != null) {
+                cntForm.removeAll();
+                cntForm = new Container(BoxLayout.y());
                 add(cntForm);
-                addButton(res.getImage("news-item.jpg"), "Promotion Formation");
-                addButton(res.getImage("news-item.jpg"), "Promotion Produits");
-
-            
+                for (Commande c : Cour) {
+                    addButton(res.getImage("cmdd.png"), c.getAddLiv(), c.getMontantCmd(),c);
+                }
+            } else {
+                cntForm.removeAll();
+                cntForm = new Container(BoxLayout.y());
+                add(cntForm);
+                Dialog.show("Info", "pas de commande en cour", "ok", null);
+            }
 
         });
-        
+
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
 
         add(LayeredLayout.encloseIn(
@@ -170,7 +197,12 @@ public class ClientCommande extends BaseForm {
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
-
+        cntForm.removeAll();
+                cntForm = new Container(BoxLayout.y());
+                add(cntForm);
+                for (Commande c : Livre) {
+                    addButton(res.getImage("pdf.png"), c.getAddLiv(), c.getMontantCmd(),c);
+                }
     }
 
     private void updateArrowPosition(Button b, Label arrow) {
@@ -217,30 +249,48 @@ public class ClientCommande extends BaseForm {
         swipe.addTab("", page1);
     }
 
-    private void addButton(Image img, String title) {
-        
+    private void addButton(Image img, String title, Double d,Commande c) {
+
         int height = Display.getInstance().convertToPixels(11.5f);
         int width = Display.getInstance().convertToPixels(14f);
         Button image = new Button(img.fill(width, height));
         image.setUIID("Label");
         cnt = BorderLayout.west(image);
-              
 
         cnt.setLeadComponent(image);
         TextArea ta = new TextArea(title);
         ta.setUIID("NewsTopLine");
         ta.setEditable(false);
+        TextArea tb = new TextArea(d.toString());
+        tb.setUIID("NewsTopLine");
+        tb.setEditable(false);
+        cnt.add(BorderLayout.CENTER,
+                BoxLayout.encloseY(
+                        ta, tb
+                ));
+        cntForm.add(cnt);
+        image.addActionListener(e -> {
+            try {
+                new Client.DetailCmdClient(res, c).show();
+                //clientTemplate.startClientCommande();
+            } catch (IOException ex) {
+            }
+        });
+
+    }
+
+    private void addMessage(String title) {
+        TextArea ta = new TextArea(title);
+        ta.setUIID("NewsTopLine");
+        ta.setEditable(false);
+        cnt = BorderLayout.west(ta);
+        cnt.setLeadComponent(ta);
         cnt.add(BorderLayout.CENTER,
                 BoxLayout.encloseY(
                         ta
-                       
-                        ) );
+                ));
         cntForm.add(cnt);
-        image.addActionListener(e -> {
-            //Client.ClientCommande clientTemplate = new ClientCommande();
-            //clientTemplate.startClientCommande();
-        });
-        
+
     }
 
     private void bindButtonSelection(Button b, Label arrow) {

@@ -32,7 +32,7 @@ public class SessionServices {
         List<Session> listS = new ArrayList<Session>();
 
         con = new ConnectionRequest();
-        con.setUrl("http://localhost:8088/MobileAziz/ScriptPHP/Utilisateur/listSessionFor.php?uid='" + idFor + "'");
+        con.setUrl("http://localhost/Demo/ScriptPHP/Utilisateur/listSessionFor.php?uid='" + idFor + "'");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -73,7 +73,7 @@ public class SessionServices {
         List<Session> listS = new ArrayList<Session>();
 
         con = new ConnectionRequest();
-        con.setUrl("http://localhost:8088/MobileAziz/ScriptPHP/Utilisateur/ListSesENCOURS.php?uid='" + SessionUser.getId() + "'");
+        con.setUrl("http://localhost/Demo/ScriptPHP/Utilisateur/ListSesENCOURS.php?uid='" + SessionUser.getId() + "'");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -113,7 +113,7 @@ public class SessionServices {
         List<Session> listS = new ArrayList<Session>();
 
         con = new ConnectionRequest();
-        con.setUrl("http://localhost:8088/MobileAziz/ScriptPHP/Utilisateur/ListSesFINIES.php?uid='" + SessionUser.getId() + "'");
+        con.setUrl("http://localhost/Demo/ScriptPHP/Utilisateur/ListSesFINIES.php?uid='" + SessionUser.getId() + "'");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -152,7 +152,7 @@ public class SessionServices {
         List<Session> listS = new ArrayList<Session>();
         System.out.println("id user"+SessionUser.getId());
         con = new ConnectionRequest();
-        con.setUrl("http://localhost:8088/MobileAziz/ScriptPHP/Formateur/listSessionsByIdFormateur.php?iduser=" + SessionUser.getId() + "");
+        con.setUrl("http://localhost/Demo/ScriptPHP/Formateur/listSessionsByIdFormateur.php?iduser=" + SessionUser.getId() + "");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -192,7 +192,7 @@ public class SessionServices {
         List<Session> listS = new ArrayList<Session>();
 
         con = new ConnectionRequest();
-        con.setUrl("http://localhost:8088/MobileAziz/ScriptPHP/Formateur/listSessionsFormationByIdFormateur.php?iduser="+SessionUser.getId()+"&idfor='" + idFor + "'");
+        con.setUrl("http://localhost/Demo/ScriptPHP/Formateur/listSessionsFormationByIdFormateur.php?iduser="+SessionUser.getId()+"&idfor='" + idFor + "'");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {

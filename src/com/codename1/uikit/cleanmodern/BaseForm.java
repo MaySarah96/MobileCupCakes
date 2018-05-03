@@ -14,7 +14,6 @@ import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
 import java.io.IOException;
-
 /**
  * Base class for the forms with common functionality
  *
@@ -65,8 +64,18 @@ public class BaseForm extends Form {
 
         tb.addMaterialCommandToSideMenu("Acceuil", FontImage.MATERIAL_UPDATE, e -> new NewsfeedForm(res).show());
         tb.addMaterialCommandToSideMenu("Profil", FontImage.MATERIAL_SETTINGS, e -> new ProfileForm(res).show());
-        tb.addMaterialCommandToSideMenu("Panier", FontImage.MATERIAL_ADD_SHOPPING_CART, e -> new Client.ClientCommande(res).show());
-        tb.addMaterialCommandToSideMenu("Produit", FontImage.MATERIAL_SHOP, e -> new Client.ClientProduit(res).show());
+        tb.addMaterialCommandToSideMenu("Panier", FontImage.MATERIAL_ADD_SHOPPING_CART, e -> {
+            try {
+                new Client.ClientPanier(res).show();
+            } catch (IOException ex) {
+            }
+        });
+        tb.addMaterialCommandToSideMenu("Produit", FontImage.MATERIAL_SHOP, e -> {
+            try {
+                new Client.ClientProduit(res).show();
+            } catch (IOException ex) {
+            }
+        });
         tb.addMaterialCommandToSideMenu("Commande", FontImage.MATERIAL_SHOPPING_CART, e -> new Client.ClientCommande(res).show());
         tb.addMaterialCommandToSideMenu("Formation", FontImage.MATERIAL_BUSINESS_CENTER, e -> new Client.ClientFormation(res).show());
         tb.addMaterialCommandToSideMenu("Promotion", FontImage.MATERIAL_MONEY_OFF, e -> new Client.ClientPromotion(res).show());

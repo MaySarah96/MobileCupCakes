@@ -35,7 +35,7 @@ public class NoteServices {
     public Note rechercheNote(Recette recette)
     {
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/MobileCupCakes/ScriptPHP/Recettes/NoteRecette.php?uid="+SessionUser.getId()+"&rid="+recette.getIdRec()); 
+        con.setUrl("http://localhost/Demo/ScriptPHP/Recettes/NoteRecette.php?uid="+SessionUser.getId()+"&rid="+recette.getIdRec()); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -65,7 +65,7 @@ public class NoteServices {
     {
         System.out.println("Services.NoteServices.AjouterNote() ajout tttttttttttttt"+ note.getNote());
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/MobileCupCakes/ScriptPHP/Recettes/AjouterNote.php?uid="+SessionUser.getId()+"&rid="+note.getRecette().getIdRec()+"&note="+note.getNote()); 
+        con.setUrl("http://localhost/Demo/ScriptPHP/Recettes/AjouterNote.php?uid="+SessionUser.getId()+"&rid="+note.getRecette().getIdRec()+"&note="+note.getNote()); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -90,7 +90,7 @@ public class NoteServices {
     public void ModifierNote(Note note)
     {
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/MobileCupCakes/ScriptPHP/Recettes/ModifierNote.php?uid="+SessionUser.getId()+"&rid="+note.getRecette().getIdRec()+"&note="+note.getNote()); 
+        con.setUrl("http://localhost/Demo/ScriptPHP/Recettes/ModifierNote.php?uid="+SessionUser.getId()+"&rid="+note.getRecette().getIdRec()+"&note="+note.getNote()); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -115,7 +115,7 @@ public class NoteServices {
     public double MoyenneNote(int idRec){
 
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/MobileCupCakes/ScriptPHP/Recettes/MoyenneNote.php?&rid="+idRec); 
+        con.setUrl("http://localhost/Demo/ScriptPHP/Recettes/MoyenneNote.php?&rid="+idRec); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {

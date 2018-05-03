@@ -6,6 +6,7 @@
 package Client;
 
 import Entity.Produit;
+import Services.PanierService;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
 import com.codename1.ui.Button;
@@ -26,6 +27,7 @@ import com.codename1.ui.RadioButton;
 import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.URLImage;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
@@ -34,6 +36,7 @@ import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
 import com.codename1.uikit.cleanmodern.BaseForm;
+import java.io.IOException;
 
 /**
  *
@@ -44,26 +47,25 @@ public class ProduitSingle extends BaseForm {
     Resources res;
 
     EncodedImage enc;
-    Container cnt,cntForm ;
-    
-    public ProduitSingle (Resources res, Produit p) {
+    Container cnt, cntForm;
+
+    public ProduitSingle(Resources res, Produit p) throws IOException {
         super("ProduitSingle", BoxLayout.y());
-        this.res=res;
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
-        setTitle("ProduitSingle");
+        setTitle("Detail");
         getContentPane().setScrollVisible(false);
         Container button = new Container();
-        System.out.println("Client.ProduitSingle.<init>()"+p);
+        System.out.println("Client.ProduitSingle.<init>()" + p);
         super.addSideMenu(res);
-        tb.addSearchCommand(e -> {
-        });
-        Tabs swipe = new Tabs();
 
+        Tabs swipe = new Tabs();
+        enc = EncodedImage.create("/giphy.gif");
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("news-item.jpg"), spacer1, "  ", "", " ");
+        Image img = URLImage.createToStorage(enc, p.getImageprod(), "http://localhost/CupCakesF/web/public/uploads/brochures/Produit/" + p.getImageprod());
+        addTab(swipe, img, spacer1, "  ", "", " ");
 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -102,24 +104,19 @@ public class ProduitSingle extends BaseForm {
         });
 
         Component.setSameSize(radioContainer, spacer1, spacer2);
-        add(LayeredLayout.encloseIn(swipe, radioContainer,button));
+        add(LayeredLayout.encloseIn(swipe, radioContainer, button));
 
         ButtonGroup barGroup = new ButtonGroup();
-        RadioButton all = RadioButton.createToggle("Produit", barGroup);
+        RadioButton all = RadioButton.createToggle(p.getNomProd(), barGroup);
         all.setUIID("SelectBar");
-        cntForm=new Container(BoxLayout.y());
-        all.addActionListener(e -> {
-                cntForm.removeAll();
-                cntForm=new Container(BoxLayout.y());
-                add(cntForm);
-                addButton(res.getImage("news-item.jpg"), p.getNomProd(),p.getQteStockProd());
-            
+        cntForm = new Container(BoxLayout.y());
+        
+        
 
-        });
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
 
         add(LayeredLayout.encloseIn(
-                GridLayout.encloseIn(4, all),
+                GridLayout.encloseIn(1, all),
                 FlowLayout.encloseBottom(arrow)
         ));
 
@@ -130,12 +127,17 @@ public class ProduitSingle extends BaseForm {
             updateArrowPosition(all, arrow);
         });
         bindButtonSelection(all, arrow);
-     
+
         // special case for rotation
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
 
+        add(cntForm);
+        //Image img = URLImage.createToStorage(enc, p.getImageprod(), "http://localhost/CupCakesF/web/public/uploads/brochures/Produit/" + p.getImageprod());
+
+        addButton(res.getImage("panier.jpg")
+                , p.getPrixProd(), p.getIdCat().getNomCat(), p.getIdUser().getNom(),p);
     }
 
     private void updateArrowPosition(Button b, Label arrow) {
@@ -146,6 +148,7 @@ public class ProduitSingle extends BaseForm {
 
     private void addTab(Tabs swipe, Image img, Label spacer, String likesStr, String commentsStr, String text) {
         int size = Math.min(Display.getInstance().getDisplayWidth(), Display.getInstance().getDisplayHeight());
+        img = img.scaled(200, 200);
         if (img.getHeight() < size) {
             img = img.scaledHeight(size);
         }
@@ -182,27 +185,44 @@ public class ProduitSingle extends BaseForm {
         swipe.addTab("", page1);
     }
 
-    private void addButton(Image img, String title,Double d) {
-        
-        int height = Display.getInstance().convertToPixels(11.5f);
-        int width = Display.getInstance().convertToPixels(14f);
-        Button image = new Button(img.fill(width, height));
-        image.setUIID("Label");
-        cnt = BorderLayout.west(image);
-              
+    private void addButton(Image img, int i, String c, String u,Produit p) {
 
+        int height = Display.getInstance().convertToPixels(8f);
+        int width = Display.getInstance().convertToPixels(10f);
+        Button image = new Button("ajouter au panier",img.fill(width, height));
+        image.setUIID("Label");
+        cnt = BorderLayout.south(image);
         cnt.setLeadComponent(image);
-        TextArea ta = new TextArea(title);
-        ta.setUIID("NewsTopLine");
-        ta.setEditable(false);
+        TextArea tc = new TextArea(String.valueOf(i));
+        tc.setUIID("NewsTopLine");
+        tc.setEditable(false);
+        TextArea td = new TextArea(u);
+        td.setEditable(false);
+        td.setUIID("NewsTopLine");
+        TextArea tb = new TextArea(c);
+        tb.setEditable(false);
+        tb.setUIID("NewsTopLine");
+        TextArea tf = new TextArea("Patisserie");
+        tf.setEditable(false);
+        tf.setUIID("NewsTopLine");
+        TextArea te = new TextArea("Prix");
+        te.setEditable(false);
+        te.setUIID("NewsTopLine");
+        TextArea tp = new TextArea("Categorie");
+        tp.setEditable(false);
+        tp.setUIID("NewsTopLine");
+
         cnt.add(BorderLayout.CENTER,
                 BoxLayout.encloseY(
-                        ta
-                       
-                        ) );
+                        BoxLayout.encloseX(te, tc), BoxLayout.encloseX(tp, tb), BoxLayout.encloseX(tf, td)
+                ));
         cntForm.add(cnt);
-      
-        
+           image.addActionListener(e->{
+                PanierService pan = PanierService.getInstance();
+                pan.ajouterArticle(p, 1);
+                System.out.println("ajouta");
+                System.out.println(pan.Afficher());
+           });
     }
 
     private void bindButtonSelection(Button b, Label arrow) {
@@ -215,4 +235,3 @@ public class ProduitSingle extends BaseForm {
         });
     }
 }
-

@@ -3,11 +3,16 @@
 <resource majorVersion="1" minorVersion="7" useXmlUI="false">
     <image name="activation-background.jpg"  />
     <image name="allR.jpg"  />
+    <image name="background.jpg"  />
     <image name="Birthday-Cupcakes-Featured.jpg"  />
+    <image name="cmdd.png"  />
     <image name="confirmation-background.jpg"  />
     <image name="Corbeille.png"  />
+    <image name="cupcake.jpg"  />
+    <image name="delete.png"  />
     <image name="dog.jpg"  />
     <image name="facebook-logo.png" type="multi"  />
+    <image name="giphy.gif"  />
     <image name="Logo.png" type="multi"  />
     <image name="MesRecettes.png"  />
     <image name="news-item-1.jpg"  />
@@ -19,6 +24,9 @@
     <image name="news-tab-down.png" type="multi"  />
     <image name="on-off-off.png" type="multi"  />
     <image name="on-off-on.png" type="multi"  />
+    <image name="panier.jpg"  />
+    <image name="pdf.png"  />
+    <image name="profilbg.jpg"  />
     <image name="profile-background.jpg"  />
     <image name="profile-pic.jpg" type="multi"  />
     <image name="refresh.png"  />
@@ -28,7 +36,7 @@
     <theme name="Theme">
         <val key="@includeNativeBool" value="true" />
         <val key="@tabPlacementInt" value="0" />
-        <val key="Activate.bgImage" value="activation-background.jpg" />
+        <val key="Activate.bgImage" value="background.jpg" />
         <val key="Activate.bgType" value="33" />
         <val key="Activate.margin" value="0,0,0,0" />
         <val key="Activate.padUnit" value="0,0,2,0" />
@@ -249,7 +257,7 @@
         <val key="SideCommand.transparency" value="0" />
         <val key="SideNavigationPanel.bgColor" value="ffffff" />
         <val key="SideNavigationPanel.transparency" value="255" />
-        <val key="SignIn.bgImage" value="signin-background.jpg" />
+        <val key="SignIn.bgImage" value="background.jpg" />
         <val key="SignIn.bgType" value="33" />
         <val key="SignIn.margin" value="0,0,0,0" />
         <val key="SignIn.padUnit" value="0,0,2,0" />

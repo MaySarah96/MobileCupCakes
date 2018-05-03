@@ -31,6 +31,7 @@ import com.codename1.ui.RadioButton;
 import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.URLImage;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
@@ -41,8 +42,8 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.ui.util.UIBuilder;
 import com.codename1.uikit.cleanmodern.BaseForm;
+import java.io.IOException;
 import java.util.List;
-
 /**
  *
  * @author escobar
@@ -54,7 +55,7 @@ public class ClientProduit extends BaseForm {
     EncodedImage enc;
     Container cnt, cntForm;
 
-    public ClientProduit(Resources res) {
+    public ClientProduit(Resources res) throws IOException {
         super("Produit", BoxLayout.y());
         this.res=res;
         Toolbar tb = new Toolbar(true);
@@ -72,8 +73,8 @@ public class ClientProduit extends BaseForm {
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("news-item.jpg"), spacer1, "  ", "", " ");
-        addTab(swipe, res.getImage("dog.jpg"), spacer2, "  ", "", "");
+        addTab(swipe, res.getImage("cupcake.jpg"), spacer1, "  ", "", " ");
+        
 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -115,7 +116,7 @@ public class ClientProduit extends BaseForm {
         add(LayeredLayout.encloseIn(swipe, radioContainer, button));
 
         ButtonGroup barGroup = new ButtonGroup();
-
+        enc = EncodedImage.create("/giphy.gif");
         RadioButton Sucre = RadioButton.createToggle("Sucrée", barGroup);
         Sucre.setUIID("SelectBar");
         Sucre.addActionListener(e -> {
@@ -123,9 +124,10 @@ public class ClientProduit extends BaseForm {
             cntForm = new Container(BoxLayout.y());
             add(cntForm);
             ProduitService ps = new ProduitService();
-            List<Produit> p = ps.findUser();
+            List<Produit> p = ps.findSucree();
             for(Produit pr : p){
-                            addButton(res.getImage("news-item.jpg"), pr.getNomProd(),pr.getQteStockProd(),pr);
+                Image img = URLImage.createToStorage(enc, pr.getImageprod(), "http://localhost/CupCakesF/web/public/uploads/brochures/Produit/"+pr.getImageprod());
+                            addButton(img, pr.getNomProd(),pr.getQteStockProd(),pr);
             }
           
 
@@ -136,9 +138,13 @@ public class ClientProduit extends BaseForm {
             cntForm.removeAll();
             cntForm = new Container(BoxLayout.y());
             add(cntForm);
-            //addButton(res.getImage("news-item.jpg"), "Liste des Formation");
-            //addButton(res.getImage("news-item.jpg"), "Formation En cours");
-            //addButton(res.getImage("news-item.jpg"), "Formation Finies");
+             ProduitService ps = new ProduitService();
+            List<Produit> p = ps.findSalee();
+            for(Produit pr : p){
+                Image img = URLImage.createToStorage(enc, pr.getImageprod(), "http://localhost/CupCakesF/web/public/uploads/brochures/Produit/"+pr.getImageprod());
+                            addButton(img, pr.getNomProd(),pr.getQteStockProd(),pr);
+            }
+          
 
         });
 
@@ -162,14 +168,16 @@ public class ClientProduit extends BaseForm {
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
-        cntForm.removeAll();
+        
         cntForm = new Container(BoxLayout.y());
         add(cntForm);
         ProduitService ps = new ProduitService();
-        List<Produit> p = ps.findUser();
+        List<Produit> p = ps.findSucree();
         for(Produit pr : p){
-            addButton(res.getImage("news-item.jpg"), pr.getNomProd(),pr.getQteStockProd(),pr);
+            Image img = URLImage.createToStorage(enc, pr.getImageprod(), "http://localhost/CupCakesF/web/public/uploads/brochures/Produit/"+pr.getImageprod());
+                        addButton(img, pr.getNomProd(),pr.getQteStockProd(),pr);
         }
+
     }
 
     private void updateArrowPosition(Button b, Label arrow) {
@@ -235,7 +243,11 @@ public class ClientProduit extends BaseForm {
         cntForm.add(cnt);
         image.addActionListener(e->{
                 
+            try {
                 new  ProduitSingle(res, p).show();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
                 
         });
     }

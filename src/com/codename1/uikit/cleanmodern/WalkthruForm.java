@@ -94,6 +94,10 @@ public class WalkthruForm extends BaseForm {
                         {
                             new NewsfeedFormFormateur(res).show();
                         }
+                         if(user.getRoles().equals("a:1:{i:0;s:15:\"ROLE_PATISSERIE\";}"))
+                        {
+                            new NewsFeedFormP(res).show();
+                        }
                     }
 
                 }
