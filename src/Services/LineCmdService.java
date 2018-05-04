@@ -31,7 +31,7 @@ public class LineCmdService {
   public void AjouterLineCommande(int id,int qte,int idp)
     {
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Commande/AjouterLineCmd.php?uid="+id+"&qteAcheter="+qte+"&idProd="+idp); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Commande/AjouterLineCmd.php?uid="+id+"&qteAcheter="+qte+"&idProd="+idp); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -51,7 +51,7 @@ public class LineCmdService {
     {
         List<LineCmd> commandes = new ArrayList<>();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Commande/LineCmdListe.php?uid=" +id); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Commande/LineCmdListe.php?uid=" +id); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -87,7 +87,7 @@ public class LineCmdService {
      public void UpdateQte(int id,int qte,Double stock)
     {
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Produits/UpdateQteAcheter.php?id="+id+"&acheter="+qte+"&stock="+stock); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Produits/UpdateQteAcheter.php?id="+id+"&acheter="+qte+"&stock="+stock); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {

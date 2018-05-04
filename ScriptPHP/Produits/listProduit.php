@@ -29,11 +29,11 @@ $db = new DB_CONNECT();
         $Produit["idProd"] = $row["idProd"];
         $Produit["nomProd"] = $row["nomProd"];
         $Produit["qteStockProd"] = $row["qteStockProd"];
-        $Produit["typeProd"] = $row["typeProd"];
+        $Produit["typeProd"] = utf8_encode ($row["typeProd"]);
         $Produit["prixProd"] = $row["prixProd"];
 	$Produit["idCat"] = $row["idCat"];
         $Produit["nomCat"] = $row["nomCat"];
-        $Produit["imageprod"] = $row["imageprod"];
+        $Produit["imageprod"] = utf8_encode ($row["imageprod"]);
                 $Produit["QteAcheter"]=$row["QteAcheter"];       
         $Produit["idProd"]=$["idProd"];
 

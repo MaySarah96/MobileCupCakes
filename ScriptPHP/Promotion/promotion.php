@@ -27,13 +27,13 @@ if (mysql_num_rows($result) > 0) {
         // temp user array
         $promtion = array();
 		$promtion["idLinePromo"]= $row["id"];
-        $promtion["nomProd"] = $row["nomProd"];
+        $promtion["nomProd"] = utf8_encode ($row["nomProd"]);
         $promtion["prixProd"] = $row["prixProd"];
         $promtion["nv_prix"] = $row["nv_prix"];
         $promtion["qteStockProd"] = $row["qteStockProd"];
         $promtion["dateDeb"] = $row["dateDeb"];
         $promtion["dateFin"] = $row["dateFin"];
-        $promtion["imageprod"] = $row["imageprod"];
+        $promtion["imageprod"] = utf8_encode ($row["imageprod"]);
 		//$promtion["views"] = $row["views"];
 
         // push single login into final response array

@@ -31,7 +31,7 @@ public class FormationServices {
         List<Formation> listF = new ArrayList<>();
 
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Utilisateur/listformation.php");
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Utilisateur/listformation.php");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -70,7 +70,7 @@ public class FormationServices {
         List<Formation> listF = new ArrayList<>();
 
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Formateur/listformationByIdFormateur.php?iduser="+SessionUser.getId());
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Formateur/listformationByIdFormateur.php?iduser="+SessionUser.getId());
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {

@@ -36,7 +36,7 @@ public class UtilisateurServices {
         Utilisateur user = new  Utilisateur();
         user.setId(null);
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Utilisateur/info_id.php?uid='" +login+"'"); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Utilisateur/info_id.php?uid='" +login+"'"); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -85,7 +85,7 @@ public class UtilisateurServices {
         
         con=new ConnectionRequest();
         System.out.println("Services.UtilisateurServices.AddUser() "+ user);
-        con.setUrl("http://localhost/Demo/ScriptPHP/Utilisateur/insert.php?username=" + user.getUsername()+"&email="+user.getEmail()+"&phonenumber=" +user.getPhoneNumber()+"&password=" +hashed.substring(0, 2)+"y"+hashed.substring(3)+"&adresse="+user.getAddresse()+"&nom="+user.getNom()+"&prenom="+user.getPrenom()+"&roles="+user.getRoles());
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Utilisateur/insert.php?username=" + user.getUsername()+"&email="+user.getEmail()+"&phonenumber=" +user.getPhoneNumber()+"&password=" +hashed.substring(0, 2)+"y"+hashed.substring(3)+"&adresse="+user.getAddresse()+"&nom="+user.getNom()+"&prenom="+user.getPrenom()+"&roles="+user.getRoles());
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -113,7 +113,7 @@ public class UtilisateurServices {
         Utilisateur user = new Utilisateur();
         user.setId(null);
        ConnectionRequest con =new ConnectionRequest();
-       con.setUrl("http://localhost/Demo/ScriptPHP/Utilisateur/Rechercher.php?uid='" +login+"'"); 
+       con.setUrl("http://localhost/Demo1/ScriptPHP/Utilisateur/Rechercher.php?uid='" +login+"'"); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {

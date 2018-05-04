@@ -34,7 +34,7 @@ public class EducateServices {
     public void InscriptionClient(int idSes)
     {
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Utilisateur/InscriptionClient.php?uid=" +idSes+""); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Utilisateur/InscriptionClient.php?uid=" +idSes+""); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
           
             @Override
@@ -66,7 +66,7 @@ public class EducateServices {
         System.out.println("search non notif");
         List<Educate> listInscri = new ArrayList<>();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Utilisateur/SearchNonNotif.php?uid="+idSes+"&date="+date);
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Utilisateur/SearchNonNotif.php?uid="+idSes+"&date="+date);
     
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
@@ -104,7 +104,7 @@ public class EducateServices {
     public void ModifieEtatNotif(int idSes)
     {
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Utilisateur/ModifieEtatNotif.php?idses="+idSes+"&iduser="+1); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Utilisateur/ModifieEtatNotif.php?idses="+idSes+"&iduser="+1); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
           
             @Override
@@ -130,7 +130,7 @@ public class EducateServices {
         
         List<Educate> listInscri = new ArrayList<>();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Utilisateur/ListInscriptionClient.php?iduser="+SessionUser.getId()+"");
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Utilisateur/ListInscriptionClient.php?iduser="+SessionUser.getId()+"");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {

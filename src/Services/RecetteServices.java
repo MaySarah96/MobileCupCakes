@@ -31,7 +31,7 @@ public class RecetteServices {
         List<Recette> recettes = new ArrayList<>();
         System.out.println("Services.RecetteServices.findRecette() "+idUser);
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Recettes/test.php?uid="+idUser+""); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Recettes/test.php?uid="+idUser+""); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {

@@ -8,6 +8,7 @@ package Client;
 import Entity.Recette;
 import Entity.SessionUser;
 import Services.RecetteServices;
+import Services.ThreadServices;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
 import com.codename1.ui.Button;
@@ -40,7 +41,6 @@ import com.codename1.ui.Image;
 import com.codename1.ui.URLImage;
 import java.io.IOException;
 
-
 /**
  *
  * @author escobar
@@ -50,12 +50,17 @@ public class ClientRecette extends BaseForm {
     Resources res;
 
     EncodedImage enc;
-    Container cnt,cntForm ;
+    Container cnt, cntForm, cntPage;
+    int iPage;
+    RadioButton[] rbsPages;
+    FlowLayout flowPage;
+    Container radioContainerPage;
+    Tabs pages ;
     
-    public ClientRecette (Resources res) throws IOException {
+    public ClientRecette(Resources res) throws IOException {
         super("Recette", BoxLayout.y());
-        this.res=res;
-        
+        this.res = res;
+        iPage = 0;
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
         getTitleArea().setUIID("Container");
@@ -67,6 +72,7 @@ public class ClientRecette extends BaseForm {
         tb.addSearchCommand(e -> {
         });
         Tabs swipe = new Tabs();
+        pages = new Tabs();
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
@@ -75,6 +81,10 @@ public class ClientRecette extends BaseForm {
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
         swipe.hideTabs();
+
+        pages.setUIID("Container");
+        pages.getContentPane().setUIID("Container");
+        pages.hideTabs();
 
         ButtonGroup bg = new ButtonGroup();
         int size = Display.getInstance().convertToPixels(1);
@@ -110,40 +120,103 @@ public class ClientRecette extends BaseForm {
         });
 
         Component.setSameSize(radioContainer, spacer1, spacer2);
-        add(LayeredLayout.encloseIn(swipe, radioContainer,button));
+        add(LayeredLayout.encloseIn(swipe, radioContainer, button));
 
         ButtonGroup barGroup = new ButtonGroup();
         RadioButton mesRecettes = RadioButton.createToggle("Mes Recettes", barGroup);
         mesRecettes.setUIID("SelectBar");
-        cntForm=new Container(BoxLayout.y());
-        mesRecettes.addActionListener(e -> {
-                cntForm.removeAll();
-                cntForm=new Container(BoxLayout.y());
-                add(cntForm);
-                RecetteServices recetteService = new RecetteServices();
-                System.out.println("Client.ClientRecette.<init>()"+SessionUser.getId());
-                List<Recette> listRecettes = recetteService.findRecette(SessionUser.getId());
-                for (Recette recette : listRecettes){
-                        Image image = URLImage.createToStorage(enc, recette.getImageRec(), "http://localhost/final/web/public/uploads/brochures/Recettes/"+recette.getImageRec());
-                        addButton(image, recette.getNomRec(),recette);
-                }
+        cntForm = new Container(BoxLayout.y());
 
+        mesRecettes.addActionListener(e -> {
+            cntForm.removeAll();
+            cntForm = new Container(BoxLayout.y());
+            iPage = 0;
+            pages.removeAll();
+            pages = new Tabs();
+            pages.setUIID("Container");
+            pages.getContentPane().setUIID("Container");
+            pages.hideTabs();
+            RecetteServices recetteService = new RecetteServices();
+            System.out.println("Client.ClientRecette.<init>()" + SessionUser.getId());
+            List<Recette> listRecettes = recetteService.findRecette(SessionUser.getId());
+            int i = 0;
+            for (Recette recette : listRecettes) {
+                if (iPage == 0 || iPage % 3 == 0) {
+                    cntPage = new Container(BoxLayout.y());
+                }
+                Image image = URLImage.createToStorage(enc, recette.getImageRec(), "http://localhost/final/web/public/uploads/brochures/Recettes/" + recette.getImageRec());
+                addButton(image, recette.getNomRec(), recette);iPage++;
+
+                if (iPage % 3 == 0 || iPage >= listRecettes.size()) {
+                    addPage(pages, cntPage);
+                }
+            }
+            rbsPages = new RadioButton[pages.getTabCount()];
+            flowPage = new FlowLayout(CENTER);
+            flowPage.setValign(BOTTOM);
+            radioContainerPage = new Container(flowPage);
+            for (int iter = 0; iter < rbsPages.length; iter++) {
+                rbsPages[iter] = RadioButton.createToggle(unselectedWalkthru, bg);
+                rbsPages[iter].setPressedIcon(selectedWalkthru);
+                rbsPages[iter].setUIID("Label");
+                radioContainerPage.add(rbsPages[iter]);
+            }
+            rbsPages[0].setSelected(true);
+            pages.addSelectionListener((j, ii) -> {
+                if (!rbsPages[ii].isSelected()) {
+                    rbsPages[ii].setSelected(true);
+                }
+            });
+            Component.setSameSize(radioContainerPage);
+            cntForm.add(pages);
+            add(cntForm);
         });
         RadioButton Formation = RadioButton.createToggle("Liste des recettes", barGroup);
         Formation.setUIID("SelectBar");
         Formation.addActionListener(e -> {
-                cntForm.removeAll();
-                cntForm=new Container(BoxLayout.y());
-                add(cntForm);
-                RecetteServices recetteService = new RecetteServices();
-                List<Recette> listRecettes = recetteService.findRecette(0);
-                for (Recette recette : listRecettes){
-                        Image image = URLImage.createToStorage(enc, recette.getImageRec(), "http://localhost/final/web/public/uploads/brochures/Recettes/"+recette.getImageRec());
-                        addButton(image, recette.getNomRec(),recette);
+            cntForm.removeAll();
+            cntForm = new Container(BoxLayout.y());
+            iPage = 0;
+            pages.removeAll();
+            pages = new Tabs();
+            pages.setUIID("Container");
+            pages.getContentPane().setUIID("Container");
+            pages.hideTabs();
+            RecetteServices recetteService = new RecetteServices();
+            List<Recette> listRecettes = recetteService.findRecette(0);
+            for (Recette recette : listRecettes) {
+                if (iPage == 0 || iPage % 3 == 0) {
+                    cntPage = new Container(BoxLayout.y());
                 }
+                Image image = URLImage.createToStorage(enc, recette.getImageRec(), "http://localhost/final/web/public/uploads/brochures/Recettes/" + recette.getImageRec());
+                addButton(image, recette.getNomRec(), recette);
+                iPage++;
 
-
+                if (iPage % 3 == 0 || iPage >= listRecettes.size()) {
+                    addPage(pages, cntPage);
+                }
+            }
+            rbsPages = new RadioButton[pages.getTabCount()];
+            flowPage = new FlowLayout(CENTER);
+            flowPage.setValign(BOTTOM);
+            radioContainerPage = new Container(flowPage);
+            for (int iter = 0; iter < rbsPages.length; iter++) {
+                rbsPages[iter] = RadioButton.createToggle(unselectedWalkthru, bg);
+                rbsPages[iter].setPressedIcon(selectedWalkthru);
+                rbsPages[iter].setUIID("Label");
+                radioContainerPage.add(rbsPages[iter]);
+            }
+            rbsPages[0].setSelected(true);
+            pages.addSelectionListener((i, ii) -> {
+                if (!rbsPages[ii].isSelected()) {
+                    rbsPages[ii].setSelected(true);
+                }
+            });
+            Component.setSameSize(radioContainerPage);
+            cntForm.add(pages);
+            add(cntForm);
         });
+
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
 
         add(LayeredLayout.encloseIn(
@@ -159,19 +232,51 @@ public class ClientRecette extends BaseForm {
         });
         bindButtonSelection(mesRecettes, arrow);
         bindButtonSelection(Formation, arrow);
-       
+
         // special case for rotation
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
-        
-        add(cntForm);
+
+        //add(cntForm);
         RecetteServices recetteService = new RecetteServices();
         List<Recette> listRecettes = recetteService.findRecette(SessionUser.getId());
-        for (Recette recette : listRecettes){
-                Image image = URLImage.createToStorage(enc, recette.getImageRec(), "http://localhost/final/web/public/uploads/brochures/Recettes/"+recette.getImageRec());
-                addButton(image, recette.getNomRec(),recette);
+
+        for (Recette recette : listRecettes) {
+            if (iPage == 0 || iPage % 3 == 0) {
+                cntPage = new Container(BoxLayout.y());
+            }
+
+            Image image = URLImage.createToStorage(enc, recette.getImageRec(), "http://localhost/final/web/public/uploads/brochures/Recettes/" + recette.getImageRec());
+            addButton(image, recette.getNomRec(), recette);
+            iPage++;
+
+            if (iPage % 3 == 0 || iPage >= listRecettes.size()) {
+                addPage(pages, cntPage);
+            }
+
         }
+        rbsPages = new RadioButton[pages.getTabCount()];
+        flowPage = new FlowLayout(CENTER);
+        flowPage.setValign(BOTTOM);
+        radioContainerPage = new Container(flowPage);
+        for (int iter = 0; iter < rbsPages.length; iter++) {
+            rbsPages[iter] = RadioButton.createToggle(unselectedWalkthru, bg);
+            rbsPages[iter].setPressedIcon(selectedWalkthru);
+            rbsPages[iter].setUIID("Label");
+            radioContainerPage.add(rbsPages[iter]);
+        }
+
+        rbsPages[0].setSelected(true);
+        pages.addSelectionListener((i, ii) -> {
+            if (!rbsPages[ii].isSelected()) {
+                rbsPages[ii].setSelected(true);
+            }
+        });
+
+        Component.setSameSize(radioContainerPage);
+        cntForm.add(pages);
+        add(cntForm);
 
     }
 
@@ -219,14 +324,24 @@ public class ClientRecette extends BaseForm {
         swipe.addTab("", page1);
     }
 
-    private void addButton(Image img, String title,Recette recette) {
-        
+    private void addPage(Tabs swipe, Container cnt) {
+        int size = Math.min(Display.getInstance().getDisplayWidth(), Display.getInstance().getDisplayHeight());
+
+        Container page1
+                = LayeredLayout.encloseIn(
+                        cnt
+                );
+
+        swipe.addTab("", page1);
+    }
+
+    private void addButton(Image img, String title, Recette recette) {
+
         int height = Display.getInstance().convertToPixels(11.5f);
         int width = Display.getInstance().convertToPixels(14f);
         Button image = new Button(img.fill(width, height));
         image.setUIID("Label");
         cnt = BorderLayout.west(image);
-              
 
         cnt.setLeadComponent(image);
         TextArea ta = new TextArea(title);
@@ -235,18 +350,21 @@ public class ClientRecette extends BaseForm {
         cnt.add(BorderLayout.CENTER,
                 BoxLayout.encloseY(
                         ta
-                       
-                        ) );
-        cntForm.add(cnt);
+                ));
+        cntPage.add(cnt);
         image.addActionListener(e -> {
             try {
-                new  SingleRecette(res, recette).show();
+                ThreadServices threadService = new ThreadServices();
+                if (threadService.findThread(recette.getIdRec().toString())) {
+                    threadService.AjouterThread(recette.getIdRec().toString());
+                }
+                new SingleRecette(res, recette).show();
                 //Client.ClientCommande clientTemplate = new ClientCommande();
                 //clientTemplate.startClientCommande();
             } catch (IOException ex) {
             }
         });
-        
+
     }
 
     private void bindButtonSelection(Button b, Label arrow) {

@@ -31,7 +31,7 @@ public class CommentaireServices {
     
     public void AjouterCommentaire(String idRec , String body){
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Recettes/AjouterCommentaire.php?uid="+SessionUser.getId()+"&rid="+idRec+"&body="+body); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Recettes/AjouterCommentaire.php?uid="+SessionUser.getId()+"&rid="+idRec+"&body="+body); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -55,7 +55,7 @@ public class CommentaireServices {
     
     public void ModifierCommentaire(Commentaire comment){
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Recettes/ModifierCommentaire.php?idCmnt="+comment.getIdCmnt()+"&body="+comment.getBody()); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Recettes/ModifierCommentaire.php?idCmnt="+comment.getIdCmnt()+"&body="+comment.getBody()); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -79,7 +79,7 @@ public class CommentaireServices {
     
     public void AjouterReply(String idRec , String body,String ancestors){
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Recettes/AjouterReply.php?uid="+SessionUser.getId()+"&rid="+idRec+"&body="+body+"&ancestors="+ancestors); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Recettes/AjouterReply.php?uid="+SessionUser.getId()+"&rid="+idRec+"&body="+body+"&ancestors="+ancestors); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -104,7 +104,7 @@ public class CommentaireServices {
     public List<Commentaire>findComment(int idRec){
         List<Commentaire> listComment = new ArrayList<>();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Recettes/AfficherCommentaire.php?rid="+idRec); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Recettes/AfficherCommentaire.php?rid="+idRec); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -142,7 +142,7 @@ public class CommentaireServices {
     public List<Commentaire>findReplyComment(String ancestors){
         List<Commentaire> listComment = new ArrayList<>();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Recettes/AfficherReplyCommentaire.php?ancestors="+ancestors); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Recettes/AfficherReplyCommentaire.php?ancestors="+ancestors); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -178,7 +178,7 @@ public class CommentaireServices {
     
     public void DeleteComment(int idCmnt){
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Recettes/DeleteCommentaire.php?idCmnt="+idCmnt); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Recettes/DeleteCommentaire.php?idCmnt="+idCmnt); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {

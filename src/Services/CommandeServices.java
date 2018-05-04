@@ -41,7 +41,7 @@ public class CommandeServices {
         con = new ConnectionRequest();
         SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
         String dateL = dt.format(commande.getDateLivCmd());
-        con.setUrl("http://localhost/Demo/ScriptPHP/Commande/AjouterCommande.php?uid=" + SessionUser.getId() + "&dateLiv=" + dateL + "&addLiv=" + commande.getAddLiv() + "&montantCmd=" + commande.getMontantCmd());
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Commande/AjouterCommande.php?uid=" + SessionUser.getId() + "&dateLiv=" + dateL + "&addLiv=" + commande.getAddLiv() + "&montantCmd=" + commande.getMontantCmd());
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -68,7 +68,7 @@ public class CommandeServices {
     public void AjouterFeedback(int id, String sujet, String Desc) {
         con = new ConnectionRequest();
 
-        con.setUrl("http://localhost/Demo/ScriptPHP/Commande/ajouterFeedback.php?uid=" + id + "&sujet=" + sujet + "&description=" + Desc);
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Commande/ajouterFeedback.php?uid=" + id + "&sujet=" + sujet + "&description=" + Desc);
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -89,7 +89,7 @@ public class CommandeServices {
         List<Commande> commandes = new ArrayList<>();
         id = SessionUser.getId();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Commande/listeCommandeencour.php?uid=" + id);
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Commande/listeCommandeencour.php?uid=" + id);
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -126,7 +126,7 @@ public class CommandeServices {
         List<Commande> commandes = new ArrayList<>();
         id = SessionUser.getId();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Commande/listeCommandeLivree.php?uid=" + id);
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Commande/listeCommandeLivree.php?uid=" + id);
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -163,7 +163,7 @@ public class CommandeServices {
         List<Commande> commandes = new ArrayList<>();
         id = SessionUser.getId();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Commande/listeCommandePrete.php?uid=" + id);
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Commande/listeCommandePrete.php?uid=" + id);
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -200,7 +200,7 @@ public class CommandeServices {
         List<LineCmd> commandes = new ArrayList<>();
         id = SessionUser.getId();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Commande/listeCommandeencourPat.php?uid=" + id);
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Commande/listeCommandeencourPat.php?uid=" + id);
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -239,7 +239,7 @@ public class CommandeServices {
         List<LineCmd> commandes = new ArrayList<>();
         id = SessionUser.getId();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Commande/listeCommandeLivreePat.php?uid=" + id);
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Commande/listeCommandeLivreePat.php?uid=" + id);
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -278,7 +278,7 @@ public class CommandeServices {
         List<LineCmd> commandes = new ArrayList<>();
         id = SessionUser.getId();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Commande/listeCommandePretePat.php?uid=" + id);
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Commande/listeCommandePretePat.php?uid=" + id);
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {

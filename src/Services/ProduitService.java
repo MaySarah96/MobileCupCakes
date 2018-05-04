@@ -33,7 +33,7 @@ public class ProduitService {
         List<Produit> recettes = new ArrayList<>();
 
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Produits/listeProduitSucree.php?uid=" + SessionUser.getId());
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Produits/listeProduitSucree.php?uid=" + SessionUser.getId());
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -70,7 +70,7 @@ public class ProduitService {
         List<Produit> listprod = new ArrayList<>();
 
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Produits/listeProduitSalee.php?uid=" + SessionUser.getId());
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Produits/listeProduitSalee.php?uid=" + SessionUser.getId());
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -107,7 +107,7 @@ public class ProduitService {
         List<Produit> listP = new ArrayList<>();
 
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Produits/listProduit.php");
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Produits/listProduit.php");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -145,7 +145,7 @@ public class ProduitService {
     public List<Produit> findSucree() {
         List<Produit> listP = new ArrayList<>();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Produits/listeProduitSucreeClient.php");
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Produits/listeProduitSucreeClient.php");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -192,7 +192,7 @@ public class ProduitService {
     public List<Produit> findSalee() {
         List<Produit> listP = new ArrayList<>();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Produits/listeProduitSaleeClient.php");
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Produits/listeProduitSaleeClient.php");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -235,7 +235,7 @@ public class ProduitService {
     public List<Produit> AfficherListProduitsPatisserie(int idUser) {
         List<Produit> listP = new ArrayList<>();
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Produits/listProduitPatisserie.php?uid=" + SessionUser.getId());
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Produits/listProduitPatisserie.php?uid=" + SessionUser.getId());
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
 
@@ -283,7 +283,7 @@ public class ProduitService {
         List<Produit> lproduit = new ArrayList<>();
         
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Promotion/listProduitUser.php?uid=1"); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Promotion/listProduitUser.php?uid=1"); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {

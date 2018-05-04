@@ -13,7 +13,7 @@ echo $id;
 echo $stock ;
 
 				
-$sql = "update produit set qteStockProd=$stock and QteAcheter=$acheter where idProd=$id";
+$sql = "update produit set qteStockProd=$stock,QteAcheter=$acheter where idProd=$id";
 
 if (mysqli_query($conn, $sql)) {
 echo "success";

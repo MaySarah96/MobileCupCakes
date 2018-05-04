@@ -37,7 +37,7 @@ public class SessionPromoService {
         List<Linepromoses> lpromotions = new ArrayList<>();
 
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Promotion/sessionpromo.php");
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Promotion/sessionpromo.php");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -72,7 +72,7 @@ public class SessionPromoService {
         List<Session> lsession = new ArrayList<>();
 
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Promotion/listsessionuser.php?uid="+SessionUser.getId());
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Promotion/listsessionuser.php?uid="+SessionUser.getId());
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -119,7 +119,7 @@ public class SessionPromoService {
         System.out.println("date" + dateDeb);
         System.out.println("dateFin " + dateFin);
 
-        con.setUrl("http://localhost/Demo/ScriptPHP/Promotion/ajoutpromoses.php?idSes=" + pr.getIdSes().getIdSes() + "&dateDeb='" + dateDeb + "'&dateFin='" + dateFin + "'&idPromo=" + pr.getIdPromo().getIdPromo());
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Promotion/ajoutpromoses.php?idSes=" + pr.getIdSes().getIdSes() + "&dateDeb='" + dateDeb + "'&dateFin='" + dateFin + "'&idPromo=" + pr.getIdPromo().getIdPromo());
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -148,7 +148,7 @@ public class SessionPromoService {
         List<Promotion> lpromotions = new ArrayList<>();
 
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Promotion/findPromo.php ");
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Promotion/findPromo.php ");
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -177,7 +177,7 @@ public class SessionPromoService {
     public void calculepromoses(Session pr) {
         con = new ConnectionRequest();
 
-        con.setUrl("http://localhost/Demo/ScriptPHP/Promotion/calculepromoses.php?nv_prix_ses=" + pr.getNvPrixSes() + "&idSes=" + pr.getIdSes());
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Promotion/calculepromoses.php?nv_prix_ses=" + pr.getNvPrixSes() + "&idSes=" + pr.getIdSes());
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
@@ -207,7 +207,7 @@ public class SessionPromoService {
         List<Session> lsession = new ArrayList<>();
         
         con = new ConnectionRequest();
-        con.setUrl("http://localhost/Demo/ScriptPHP/Promotion/affichepromosesuser.php?uid="+SessionUser.getId()); 
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Promotion/affichepromosesuser.php?uid="+SessionUser.getId()); 
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
                 public void actionPerformed(NetworkEvent evt) {
@@ -245,7 +245,7 @@ public class SessionPromoService {
          public void updateetat(Linepromoses pr) {
         con = new ConnectionRequest();
 
-        con.setUrl("http://localhost/Demo/ScriptPHP/Promotion/updateetatses.php?id"+pr.getIdLine());
+        con.setUrl("http://localhost/Demo1/ScriptPHP/Promotion/updateetatses.php?id"+pr.getIdLine());
         con.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {

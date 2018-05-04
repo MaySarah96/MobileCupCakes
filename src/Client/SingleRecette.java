@@ -245,47 +245,53 @@ public class SingleRecette extends BaseForm{
             contNameDate.getStyle().setMargin(4, 0, 0, 0);
             contNameDate.add(username).add(created_at);
             Button Delete = new Button(res.getImage("Corbeille.png").scaled(15, 15));
-            Delete.getStyle().setPadding(1, 1, 1, 1);
-            
             Button Update = new Button(res.getImage("refresh.png").scaled(15, 15));
-            Update.getStyle().setPadding(1, 1, 1, 1);
-            //Label Update = new Label(res.getImage("corbeille.png"));
-            
-            Delete.addActionListener(l->{
-                commentService.DeleteComment(comment.getIdCmnt());
-                try {
-                    removeAll();
-                    start();
-                } catch (IOException ex) {
-                }
-            });
-            
-            Update.addActionListener(l->{
-                Update.remove();
-                TextArea commentUpdate = new TextArea(comment.getBody());
-                Button Modifier = new Button("Modifier");
-                contReply.add(commentUpdate).add(Modifier);
-                Validator valid=new Validator(); 
-                valid.addConstraint(commentUpdate, new LengthConstraint(2));
-                valid.addSubmitButtons(Modifier);
-                valid.setShowErrorMessageForFocusedComponent(true); 
-                Modifier.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent l) {
-                        CommentaireServices commentService = new CommentaireServices();
-                        comment.setBody(commentUpdate.getText());
-                        commentService.ModifierCommentaire(comment);
+            if(listCom.get(0).getIdUser().getId() == SessionUser.getId())
+            {
+                
+                Delete.getStyle().setPadding(1, 1, 1, 1);
+
+                
+                Update.getStyle().setPadding(1, 1, 1, 1);
+                //Label Update = new Label(res.getImage("corbeille.png"));
+
+                Delete.addActionListener(l->{
+                    commentService.DeleteComment(comment.getIdCmnt());
+                    try {
                         removeAll();
-                        try {
-                            start();
-                        } catch (IOException ex) {
-                        }
+                        start();
+                    } catch (IOException ex) {
                     }
                 });
-                
-            });
-            
-            contDeleteUpdate.add(body).add(Update).add(Delete);
+
+                Update.addActionListener(l->{
+                    Update.remove();
+                    TextArea commentUpdate = new TextArea(comment.getBody());
+                    Button Modifier = new Button("Modifier");
+                    contReply.add(commentUpdate).add(Modifier);
+                    Validator valid=new Validator(); 
+                    valid.addConstraint(commentUpdate, new LengthConstraint(2));
+                    valid.addSubmitButtons(Modifier);
+                    valid.setShowErrorMessageForFocusedComponent(true); 
+                    Modifier.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent l) {
+                            CommentaireServices commentService = new CommentaireServices();
+                            comment.setBody(commentUpdate.getText());
+                            commentService.ModifierCommentaire(comment);
+                            removeAll();
+                            try {
+                                start();
+                            } catch (IOException ex) {
+                            }
+                        }
+                    });
+
+                });
+            }
+            contDeleteUpdate.add(body);
+            if(listCom.get(0).getIdUser().getId() == SessionUser.getId())
+                contDeleteUpdate.add(Update).add(Delete);
             contDeleteUpdate.getStyle().setMargin(0, 0, 0, 0);
             contCom.add(contNameDate).add(contDeleteUpdate);
             listCom.remove(0);
