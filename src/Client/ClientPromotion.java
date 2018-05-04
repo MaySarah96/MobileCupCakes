@@ -5,8 +5,15 @@
  */
 package Client;
 
+import Entity.LinePromo;
+import Entity.Linepromoses;
+import Entity.Produit;
 import Entity.Recette;
+import Services.ProduitService;
+import Services.PromotionService;
 import Services.RecetteServices;
+import Services.SessionPromoService;
+import com.codename1.components.ImageViewer;
 import com.codename1.components.ScaleImageLabel;
 import com.codename1.components.SpanLabel;
 import com.codename1.ui.Button;
@@ -28,6 +35,7 @@ import com.codename1.ui.RadioButton;
 import com.codename1.ui.Tabs;
 import com.codename1.ui.TextArea;
 import com.codename1.ui.Toolbar;
+import com.codename1.ui.URLImage;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
 import com.codename1.ui.layouts.FlowLayout;
@@ -38,6 +46,7 @@ import com.codename1.ui.plaf.UIManager;
 import com.codename1.ui.util.Resources;
 import com.codename1.ui.util.UIBuilder;
 import com.codename1.uikit.cleanmodern.BaseForm;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -47,28 +56,34 @@ import java.util.List;
 public class ClientPromotion extends BaseForm {
 
     Resources res;
-
     EncodedImage enc;
-    Container cnt,cntForm ;
-    
-    public ClientPromotion (Resources res) {
+    Container cnt, cntForm;
+    private Resources theme;
+
+    public ClientPromotion(Resources res) throws IOException {
+
         super("Promotion", BoxLayout.y());
+        theme = UIManager.initFirstTheme("/theme");
+
+        this.res = res;
         Toolbar tb = new Toolbar(true);
         setToolbar(tb);
+        enc = EncodedImage.create("/giphy.gif");
         getTitleArea().setUIID("Container");
         setTitle("Promotion");
         getContentPane().setScrollVisible(false);
         Container button = new Container();
-
         super.addSideMenu(res);
+
         tb.addSearchCommand(e -> {
         });
+
         Tabs swipe = new Tabs();
 
         Label spacer1 = new Label();
         Label spacer2 = new Label();
-        addTab(swipe, res.getImage("news-item.jpg"), spacer1, "  ", "", " ");
-        addTab(swipe, res.getImage("dog.jpg"), spacer2, "  ", "", "");
+        Image img = theme.getImage("may.jpg");
+        addTab(swipe, img, spacer1, "  ", "", " ");
 
         swipe.setUIID("Container");
         swipe.getContentPane().setUIID("Container");
@@ -107,35 +122,42 @@ public class ClientPromotion extends BaseForm {
         });
 
         Component.setSameSize(radioContainer, spacer1, spacer2);
-        add(LayeredLayout.encloseIn(swipe, radioContainer,button));
+        add(LayeredLayout.encloseIn(swipe, radioContainer, button));
+//hne chnbdl kol chy 
 
         ButtonGroup barGroup = new ButtonGroup();
-        RadioButton all = RadioButton.createToggle("Produit", barGroup);
+        RadioButton all = RadioButton.createToggle("Promtion", barGroup);
         all.setUIID("SelectBar");
-        cntForm=new Container(BoxLayout.y());
+        cntForm = new Container(BoxLayout.y());
         all.addActionListener(e -> {
-                cntForm.removeAll();
-                cntForm=new Container(BoxLayout.y());
-                add(cntForm);
-                    addButton(res.getImage("news-item.jpg"), "Produit"); 
-                    addButton(res.getImage("news-item.jpg"), "Formation");
+            cntForm.removeAll();
+            cntForm = new Container(BoxLayout.y());
+            add(cntForm);
+            PromotionService psk = new PromotionService();
+            List<LinePromo> pi = psk.findUser();
+            for (LinePromo pr : pi) {
+                Image image = URLImage.createToStorage(enc, pr.getIdProd().getImageprod(), "http://localhost/final/web/public/uploads/brochures/Produit/" + pr.getIdProd().getImageprod());
+                addButton(image, pr.getIdProd().getNomProd(), pr.getIdProd().getPrixProd(), pr);
 
-            
+            }
 
         });
-        RadioButton Formation = RadioButton.createToggle("Formation", barGroup);
+        RadioButton Formation = RadioButton.createToggle("Session", barGroup);
         Formation.setUIID("SelectBar");
         Formation.addActionListener(e -> {
-                cntForm.removeAll();
-                cntForm=new Container(BoxLayout.y());
-                add(cntForm);
-                addButton(res.getImage("news-item.jpg"), "Liste");
-                addButton(res.getImage("news-item.jpg"), "En cours");
-                addButton(res.getImage("news-item.jpg"), "Formation Finies");
+            cntForm.removeAll();
+            cntForm = new Container(BoxLayout.y());
+            add(cntForm);
+            SessionPromoService psl = new SessionPromoService();
+            List<Linepromoses> pp = psl.findUser();
+            for (Linepromoses pr : pp) {
+                Image image = URLImage.createToStorage(enc, pr.getIdSes().getImagesess(), "http://localhost/final/web/public/uploads/brochures/Formateur/" + pr.getIdSes().getImagesess());
 
+                addButton2(image, pr.getIdSes().getNomSes(), pr.getIdSes().getPrixSes(), pr);
+            }
 
         });
-        
+
         Label arrow = new Label(res.getImage("news-tab-down-arrow.png"), "Container");
 
         add(LayeredLayout.encloseIn(
@@ -156,6 +178,16 @@ public class ClientPromotion extends BaseForm {
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
+        cntForm = new Container(BoxLayout.y());
+        
+        PromotionService psk = new PromotionService();
+        List<LinePromo> pi = psk.findUser();
+        for (LinePromo pr : pi) {
+            Image image2 = URLImage.createToStorage(enc, pr.getIdProd().getImageprod(), "http://localhost/final/web/public/uploads/brochures/Produit/" + pr.getIdProd().getImageprod());
+            addButton(image2, pr.getIdProd().getNomProd(), pr.getIdProd().getPrixProd(), pr);
+
+        }
+        add(cntForm);
 
     }
 
@@ -167,6 +199,7 @@ public class ClientPromotion extends BaseForm {
 
     private void addTab(Tabs swipe, Image img, Label spacer, String likesStr, String commentsStr, String text) {
         int size = Math.min(Display.getInstance().getDisplayWidth(), Display.getInstance().getDisplayHeight());
+//        img.scaled(250, 250);
         if (img.getHeight() < size) {
             img = img.scaledHeight(size);
         }
@@ -203,30 +236,66 @@ public class ClientPromotion extends BaseForm {
         swipe.addTab("", page1);
     }
 
-    private void addButton(Image img, String title) {
-        
+    private void addButton(Image img, String title, double d, LinePromo p) {
+
         int height = Display.getInstance().convertToPixels(11.5f);
         int width = Display.getInstance().convertToPixels(14f);
         Button image = new Button(img.fill(width, height));
         image.setUIID("Label");
         cnt = BorderLayout.west(image);
-              
-
         cnt.setLeadComponent(image);
         TextArea ta = new TextArea(title);
         ta.setUIID("NewsTopLine");
         ta.setEditable(false);
+        TextArea tb = new TextArea("Prix :" + String.valueOf(d));
+        tb.setUIID("NewsTopLine");
+        tb.setEditable(false);
         cnt.add(BorderLayout.CENTER,
                 BoxLayout.encloseY(
-                        ta
-                       
-                        ) );
+                        ta, tb
+                ));
         cntForm.add(cnt);
         image.addActionListener(e -> {
-            //Client.ClientCommande clientTemplate = new ClientCommande();
-            //clientTemplate.startClientCommande();
+            try {
+                PromotionService psk = new PromotionService();
+                if (!(psk.userviews(p))) 
+                    psk.insertviwes(p);
+                new PromoSingle(res, p).show();                
+            } catch (IOException ex) {
+            }
+
         });
-        
+
+    }
+
+    private void addButton2(Image img, String title, double d, Linepromoses pr) {
+
+        int height = Display.getInstance().convertToPixels(11.5f);
+        int width = Display.getInstance().convertToPixels(14f);
+        Button image = new Button(img.fill(width, height));
+        image.setUIID("Label");
+        cnt = BorderLayout.west(image);
+        cnt.setLeadComponent(image);
+        TextArea ta = new TextArea(title);
+        ta.setUIID("NewsTopLine");
+        ta.setEditable(false);
+        TextArea tb = new TextArea("Prix :" + String.valueOf(d));
+        tb.setUIID("NewsTopLine");
+        tb.setEditable(false);
+        cnt.add(BorderLayout.CENTER,
+                BoxLayout.encloseY(
+                        ta, tb
+                ));
+        cntForm.add(cnt);
+        image.addActionListener(e -> {
+            try {
+                new SessionPromoSingle(res, pr).show();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
+        });
+
     }
 
     private void bindButtonSelection(Button b, Label arrow) {

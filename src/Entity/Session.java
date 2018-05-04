@@ -192,8 +192,10 @@ public class Session {
 
     @Override
     public String toString() {
-        return "Entity.Session[ idSes=" + idSes + " ]";
+        return nomSes ;
     }
+
+    
     
     
 }

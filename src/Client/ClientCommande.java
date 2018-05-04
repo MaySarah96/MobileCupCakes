@@ -60,7 +60,7 @@ public class ClientCommande extends BaseForm {
     public ClientCommande(Resources res) {
         super("Commandes", BoxLayout.y());
         Toolbar tb = new Toolbar(true);
-        this.res=res;
+        this.res = res;
         setToolbar(tb);
         getTitleArea().setUIID("Container");
         setTitle("Commandes");
@@ -126,7 +126,7 @@ public class ClientCommande extends BaseForm {
                 cntForm = new Container(BoxLayout.y());
                 add(cntForm);
                 for (Commande c : Prete) {
-                    addButton(res.getImage("pdf.png"), c.getAddLiv(), c.getMontantCmd(),c);
+                    addButton(res.getImage("pdf.png"), c.getAddLiv(), c.getMontantCmd(), c);
                 }
             } else {
                 cntForm.removeAll();
@@ -145,7 +145,7 @@ public class ClientCommande extends BaseForm {
                 cntForm = new Container(BoxLayout.y());
                 add(cntForm);
                 for (Commande c : Livre) {
-                    addButton(res.getImage("pdf.png"), c.getAddLiv(), c.getMontantCmd(),c);
+                    addButton(res.getImage("pdf.png"), c.getAddLiv(), c.getMontantCmd(), c);
                 }
             } else {
                 cntForm.removeAll();
@@ -165,7 +165,7 @@ public class ClientCommande extends BaseForm {
                 cntForm = new Container(BoxLayout.y());
                 add(cntForm);
                 for (Commande c : Cour) {
-                    addButton(res.getImage("cmdd.png"), c.getAddLiv(), c.getMontantCmd(),c);
+                    addButton(res.getImage("cmdd.png"), c.getAddLiv(), c.getMontantCmd(), c);
                 }
             } else {
                 cntForm.removeAll();
@@ -197,12 +197,20 @@ public class ClientCommande extends BaseForm {
         addOrientationListener(e -> {
             updateArrowPosition(barGroup.getRadioButton(barGroup.getSelectedIndex()), arrow);
         });
-        cntForm.removeAll();
-                cntForm = new Container(BoxLayout.y());
-                add(cntForm);
-                for (Commande c : Livre) {
-                    addButton(res.getImage("pdf.png"), c.getAddLiv(), c.getMontantCmd(),c);
-                }
+        if (Prete != null) {
+            cntForm.removeAll();
+            cntForm = new Container(BoxLayout.y());
+            add(cntForm);
+            for (Commande c : Prete) {
+                addButton(res.getImage("pdf.png"), c.getAddLiv(), c.getMontantCmd(), c);
+            }
+        } else {
+            cntForm.removeAll();
+            cntForm = new Container(BoxLayout.y());
+            Dialog.show("Info", "pas de commande en Prete", "ok", null);
+            add(cntForm);
+
+        }
     }
 
     private void updateArrowPosition(Button b, Label arrow) {
@@ -249,7 +257,7 @@ public class ClientCommande extends BaseForm {
         swipe.addTab("", page1);
     }
 
-    private void addButton(Image img, String title, Double d,Commande c) {
+    private void addButton(Image img, String title, Double d, Commande c) {
 
         int height = Display.getInstance().convertToPixels(11.5f);
         int width = Display.getInstance().convertToPixels(14f);

@@ -83,4 +83,24 @@ public class LineCmdService {
         NetworkManager.getInstance().addToQueueAndWait(con);
         return commandes;
     }
+     
+     public void UpdateQte(int id,int qte,Double stock)
+    {
+        con = new ConnectionRequest();
+        con.setUrl("http://localhost/Demo/ScriptPHP/Produits/UpdateQteAcheter.php?id="+id+"&acheter="+qte+"&stock="+stock); 
+        con.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+                public void actionPerformed(NetworkEvent evt) {
+                    byte[] data = (byte[]) evt.getMetaData(); 
+                    String s = new String(data);  
+                    if (s.equals("Error")) {
+                        Dialog.show("Echec", "erreur", "Ok", null);
+                        
+                    } 
+                    
+                }
+            });
+        NetworkManager.getInstance().addToQueueAndWait(con);
+    }
+  
 }

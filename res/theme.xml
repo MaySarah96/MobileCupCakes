@@ -14,6 +14,7 @@
     <image name="facebook-logo.png" type="multi"  />
     <image name="giphy.gif"  />
     <image name="Logo.png" type="multi"  />
+    <image name="may.jpg"  />
     <image name="MesRecettes.png"  />
     <image name="news-item-1.jpg"  />
     <image name="news-item-2.jpg"  />
@@ -82,6 +83,10 @@
         <val key="CenterLink.padUnit" value="2,2,2,2" />
         <val key="CenterLink.padding" value="2,2,1,1" />
         <val key="CenterLink.transparency" value="0" />
+        <val key="DatePicker.align" value="4" />
+        <val key="DatePicker.bgColor" value="ffcccc" />
+        <border key="DatePicker.border" type="round" roundBorderColor="16764108" opacity="255" strokeColor="16764108" strokeOpacity="255" strokeThickness="0.5" strokeMM="false" shadowSpread="10" shadowOpacity="0" shadowX="0.5" shadowY="0.5" shadowBlur="10.0" shadowMM="false" rectangle="true" />
+        <val key="DatePicker.transparency" value="255" />
         <val key="DatePickerDay.align" value="4" />
         <val key="DatePickerDay.fgColor" value="ffffff" />
         <font key="DatePickerDay.font" type="ttf" face="0" style="0" size="0" name="native:MainThin" family="native:MainThin" sizeSettings="3" actualSize="4.5" />

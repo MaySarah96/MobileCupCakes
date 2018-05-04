@@ -172,7 +172,10 @@ public class ConfirmerPanierClient extends BaseForm {
                 System.out.println(ps);
                 LineCmdService line = new LineCmdService();
                 line.AjouterLineCommande(Integer.parseInt(id), ps.getValue(), ps.getKey().getIdProd());
-
+                int Qte = ps.getKey().getQteAcheter()+1 + ps.getValue()-1;
+                Double Stock = ps.getKey().getQteStockProd()-ps.getValue();
+                System.out.println("qte"+Qte+"Stock"+Stock);
+                line.UpdateQte(ps.getKey().getIdProd(), Qte, Stock);
             }
             panierService.closePanier();
             new Client.ClientCommande(res).show();

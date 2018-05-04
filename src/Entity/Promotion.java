@@ -97,11 +97,9 @@ public class Promotion {
         }
         return true;
     }
-
-    @Override
+  @Override
     public String toString() {
-        return "Promotion{" + "idPromo=" + idPromo + ", tauxPromo=" + tauxPromo + ", etatPromo=" + etatPromo + '}';
+        return  tauxPromo.toString() ;
     }
-
     
 }

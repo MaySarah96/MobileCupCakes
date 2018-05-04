@@ -13,6 +13,8 @@ import com.codename1.ui.layouts.LayeredLayout;
 import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import java.io.IOException;
+
 
 /**
  * Base class for the forms with common functionality
@@ -65,7 +67,18 @@ public class BaseFormFormateur extends Form {
         tb.addMaterialCommandToSideMenu("Acceuil", FontImage.MATERIAL_UPDATE, e -> new NewsfeedFormFormateur(res).show());
         tb.addMaterialCommandToSideMenu("Profil", FontImage.MATERIAL_SETTINGS, e -> new ProfileForm(res).show());
         tb.addMaterialCommandToSideMenu("Formation", FontImage.MATERIAL_BUSINESS_CENTER, e -> new Formateur.FormateurFormation(res).show());
-       // tb.addMaterialCommandToSideMenu("Promotion", FontImage.MATERIAL_MONEY_OFF, e -> new Formateur.ClientPromotion(res).show());
+        tb.addMaterialCommandToSideMenu("Ajout Promotion", FontImage.MATERIAL_MONEY_OFF, e -> {
+            try {
+                new Formateur.FormateurAjout(res).show();
+            } catch (IOException ex) {
+            }
+        });
+         tb.addMaterialCommandToSideMenu("Afficher Promotion", FontImage.MATERIAL_MONEY_OFF, e -> {
+            try {
+                new Formateur.Formateuraffiche(res).show();
+            } catch (IOException ex) {
+            }
+        });
       //  tb.addMaterialCommandToSideMenu("Recette", FontImage.MATERIAL_RESTAURANT_MENU, e -> new Client.ClientRecette(res).show());        
         tb.addMaterialCommandToSideMenu("Logout", FontImage.MATERIAL_EXIT_TO_APP, e -> new WalkthruForm(res).show());
 

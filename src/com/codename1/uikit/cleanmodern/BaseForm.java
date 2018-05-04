@@ -14,6 +14,8 @@ import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
 import java.io.IOException;
+
+
 /**
  * Base class for the forms with common functionality
  *
@@ -55,13 +57,11 @@ public class BaseForm extends Form {
         ScaleImageLabel sl = new ScaleImageLabel(img);
         sl.setUIID("BottomPad");
         sl.setBackgroundType(Style.BACKGROUND_IMAGE_SCALED_FILL);
-
         tb.addComponentToSideMenu(LayeredLayout.encloseIn(
                 sl,
                 FlowLayout.encloseCenterBottom(
                         new Label(res.getImage("profile-pic.jpg"), "PictureWhiteBackgrond"))
         ));
-
         tb.addMaterialCommandToSideMenu("Acceuil", FontImage.MATERIAL_UPDATE, e -> new NewsfeedForm(res).show());
         tb.addMaterialCommandToSideMenu("Profil", FontImage.MATERIAL_SETTINGS, e -> new ProfileForm(res).show());
         tb.addMaterialCommandToSideMenu("Panier", FontImage.MATERIAL_ADD_SHOPPING_CART, e -> {
@@ -78,13 +78,20 @@ public class BaseForm extends Form {
         });
         tb.addMaterialCommandToSideMenu("Commande", FontImage.MATERIAL_SHOPPING_CART, e -> new Client.ClientCommande(res).show());
         tb.addMaterialCommandToSideMenu("Formation", FontImage.MATERIAL_BUSINESS_CENTER, e -> new Client.ClientFormation(res).show());
-        tb.addMaterialCommandToSideMenu("Promotion", FontImage.MATERIAL_MONEY_OFF, e -> new Client.ClientPromotion(res).show());
+        tb.addMaterialCommandToSideMenu("Promotion", FontImage.MATERIAL_MONEY_OFF, e -> {
+            
+            try {
+                new Client.ClientPromotion(res).show();
+            } catch (IOException ex) {
+            }
+          
+        });
         tb.addMaterialCommandToSideMenu("Recette", FontImage.MATERIAL_RESTAURANT_MENU, e -> {
             try {
                 new Client.ClientRecette(res).show();
             } catch (IOException ex) {
             }
-        });        
+        });
         tb.addMaterialCommandToSideMenu("Logout", FontImage.MATERIAL_EXIT_TO_APP, e -> new WalkthruForm(res).show());
 
     }

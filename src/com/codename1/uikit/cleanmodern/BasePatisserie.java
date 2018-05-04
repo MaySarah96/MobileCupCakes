@@ -77,9 +77,15 @@ public class BasePatisserie extends Form {
             } catch (IOException ex) {
             }
         });
-        tb.addMaterialCommandToSideMenu("Promotion", FontImage.MATERIAL_MONEY_OFF, e -> {
+        tb.addMaterialCommandToSideMenu("Ajout Promotion", FontImage.MATERIAL_MONEY_OFF, e -> {
             try {
-                new Patisserie.PatisseriePromo(res).show();
+                new Patisserie.PatisserieAjout(res).show();
+            } catch (IOException ex) {
+            }
+        });
+         tb.addMaterialCommandToSideMenu("Afficher Promotion", FontImage.MATERIAL_MONEY_OFF, e -> {
+            try {
+                new Patisserie.patisserieaffiche(res).show();
             } catch (IOException ex) {
             }
         });

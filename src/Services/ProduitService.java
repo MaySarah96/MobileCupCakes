@@ -277,4 +277,42 @@ public class ProduitService {
         return listP;
 
     }
+
+ public List<Produit> findProduitByUser()
+    {
+        List<Produit> lproduit = new ArrayList<>();
+        
+        con = new ConnectionRequest();
+        con.setUrl("http://localhost/Demo/ScriptPHP/Promotion/listProduitUser.php?uid=1"); 
+        con.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+                public void actionPerformed(NetworkEvent evt) {
+                    try {
+                        JSONParser j = new JSONParser();
+                        Map<String, Object> produits = j.parseJSON(new CharArrayReader(new String(con.getResponseData()).toCharArray()));
+                        System.out.println(produits);
+                        List<Map<String, Object>> list = (List<Map<String, Object>>) produits.get("info");
+                        System.out.println("info : " + list);
+                        if( list!=null)
+                        {
+                            for (Map<String, Object> obj : list) { 
+                                Produit p = new Produit();
+                                p.setNomProd(obj.get("nomProd").toString());
+                                p.setIdProd(Integer.parseInt(obj.get("idProd").toString()));
+                              //  p.setNvPrix(Integer.parseInt(obj.get("nv_prix").toString()));
+                                p.setPrixProd(Integer.parseInt(obj.get("prixProd").toString()));
+                                p.setQteStockProd(Double.parseDouble(obj.get("qteStockProd").toString()));
+                                p.setTypeProd(obj.get("typeProd").toString());
+                                lproduit.add(p);
+
+                            }
+                        }
+                    } catch (IOException ex) {
+                    }
+                }
+        });
+       
+        NetworkManager.getInstance().addToQueueAndWait(con);
+        return lproduit;
+    }
 }
